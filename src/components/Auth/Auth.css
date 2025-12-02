@@ -1,0 +1,153 @@
+/* Overlay (top-right popup) */
+.popup-overlay {
+  position: fixed;
+  top: 90px;
+  right: 5%; /* instead of left: 80% */
+  background: rgba(0, 0, 0, 0); /* transparent background */
+  z-index: 999;
+}
+
+/* Popup Box */
+.popup-content {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 8px;
+  width: 380px;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+  font-family: "Inter", sans-serif;
+}
+
+/* Close */
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Tabs */
+.popup-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+}
+
+.tab.active {
+  color: #6c63ff;
+  border-bottom: 2px solid #6c63ff;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 10px 10px 10px 36px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.input-wrapper input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #888;
+}
+
+/* Options */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+
+.forgot-link {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.submit-btn:hover {
+  background: #5146d6;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 500px) {
+  .popup-content {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%; /* Full width on small screens */
+  }
+}
