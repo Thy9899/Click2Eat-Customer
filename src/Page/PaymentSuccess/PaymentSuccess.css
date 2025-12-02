@@ -1,0 +1,83 @@
+.success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f7f7f7;
+}
+
+.success-card {
+  background: white;
+  padding: 40px 50px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #28a745;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pop 0.4s ease-out;
+}
+
+.checkmark span {
+  color: white;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.success-card h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.success-card p {
+  font-size: 16px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.success-btn {
+  margin-top: 25px;
+  padding: 12px 20px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.success-btn:hover {
+  background: #218838;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
