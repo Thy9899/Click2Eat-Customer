@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .payment-wrapper {
   max-width: 600px;
   margin: 50px auto;
@@ -71,3 +72,78 @@
     gap: 15px;
   }
 }
+=======
+.payment-wrapper {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.payment-wrapper h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.payment-wrapper p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #555;
+}
+
+.payment-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.payment-buttons button {
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.payment-buttons button:hover {
+  opacity: 0.9;
+}
+
+.payment-buttons button:first-child {
+  background-color: #007bff; /* Credit Card */
+}
+
+.payment-buttons button:last-child {
+  background-color: #28a745; /* Cash */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .payment-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

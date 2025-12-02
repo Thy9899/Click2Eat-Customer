@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Container */
 .header-slideshow-container {
   position: relative;
@@ -123,3 +124,130 @@
     padding: 10px;
   }
 }
+=======
+/* Container */
+.header-slideshow-container {
+  position: relative;
+  margin: auto;
+  width: 80%;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
+/* Each Slide */
+.mySlides {
+  display: none;
+  height: 600px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  position: relative;
+}
+
+/* Overlay text */
+.header-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 40px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 0 0 16px 16px;
+  text-align: center;
+}
+
+.header-overlay h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.header-overlay p {
+  font-size: 18px;
+}
+
+/* Fade effect */
+.fade {
+  animation: fade 4s ease-in-out;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Navigation buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  padding: 16px;
+  margin-top: -30px;
+  color: black;
+  font-weight: bold;
+  font-size: 26px;
+  user-select: none;
+  /* background: rgba(0, 0, 0, 0.4); */
+  transition: 0.3s;
+}
+
+.next {
+  right: 0;
+  border-radius: 0 5px 5px 0;
+}
+
+.prev {
+  left: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.prev:hover,
+.next:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Dots */
+.dots {
+  text-align: center;
+  padding: 15px;
+  background: transparent;
+}
+
+.dot {
+  cursor: pointer;
+  height: 14px;
+  width: 14px;
+  margin: 0 4px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background 0.4s;
+}
+
+.active,
+.dot:hover {
+  background-color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header-overlay h2 {
+    font-size: 20px;
+  }
+  .header-overlay p {
+    font-size: 14px;
+  }
+  .prev,
+  .next {
+    font-size: 20px;
+    padding: 10px;
+  }
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Menu Container */
 .menu-container {
   text-align: center;
@@ -52,3 +53,59 @@
   font-weight: 500;
   color: #333;
 }
+=======
+/* Menu Container */
+.menu-container {
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.menu-title {
+  text-align: center;
+  margin: 2rem 0;
+  color: #27ae60; /* green highlight */
+  background: rgba(52, 113, 254, 0.201);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+/* Grid Layout */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Menu Card */
+.menu-card {
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  border-color: #007bff;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.menu-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.menu-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

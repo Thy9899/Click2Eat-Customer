@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .order-wrapper {
   width: 80%;
   margin: 10px auto;
@@ -71,3 +72,78 @@
 .btn-invoice:hover {
   background: #006fde;
 }
+=======
+.order-wrapper {
+  width: 80%;
+  margin: 10px auto;
+  font-family: "Inter", sans-serif;
+}
+
+.header-order-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-back:hover {
+  transform: scale(1.05);
+  color: #000;
+}
+
+.page-title {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.orders-list {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  margin-bottom: 20px;
+  /* background: #fff; */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(3, 205, 255, 0.384);
+  /* height: 500px; */
+}
+
+.order-card {
+  height: fit-content;
+}
+
+.btn-invoice {
+  padding: 8px 14px;
+  background: #0a84ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease-in-out;
+}
+
+.btn-invoice:hover {
+  background: #006fde;
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

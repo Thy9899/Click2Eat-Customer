@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .contact-container {
   text-align: center;
   /* padding: 40px 20px; */
@@ -127,3 +128,134 @@
 .footer-contact p {
   margin: 5px 0;
 } */
+=======
+.contact-container {
+  text-align: center;
+  /* padding: 40px 20px; */
+  font-family: "Arial", sans-serif;
+  padding: 0 9%;
+}
+
+.contact-title {
+  text-align: center;
+  /* font-size: 2.5rem; */
+  color: #27ae60; /* green highlight */
+  background: rgba(52, 113, 254, 0.201);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.contact-subtitle {
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.contact-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.contact-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 40px 20px 20px; /* extra top padding for icon overlap */
+  width: 280px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative; /* so icon can be positioned absolute */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.icon-wrapper {
+  position: absolute; /* allow floating */
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff5f0;
+  color: #ff6a3d;
+  font-size: 22px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon-wrapper img {
+  width: 40px;
+  height: 40px;
+}
+
+.contact-card h3 {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.contact-card a {
+  display: inline-block;
+  margin-top: 8px;
+  text-decoration: none;
+  color: #ff6a3d;
+  font-weight: bold;
+}
+
+/* Footer */
+/* .footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: #f9f9f9;
+  padding: 40px 20px;
+  border-top: 1px solid #eee;
+}
+
+.footer-logo {
+  max-width: 250px;
+}
+
+.footer-logo img {
+  width: 40px;
+}
+
+.footer-logo h4 {
+  margin: 5px 0;
+  color: #a33;
+}
+
+.footer-links {
+  display: flex;
+  gap: 50px;
+}
+
+.footer-links h5 {
+  margin-bottom: 10px;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.footer-contact h5 {
+  margin-bottom: 10px;
+}
+
+.footer-contact p {
+  margin: 5px 0;
+} */
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

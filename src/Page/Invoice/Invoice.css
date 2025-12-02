@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .order-status-wrapper {
   display: flex;
   justify-content: center;
@@ -118,3 +119,125 @@
   text-align: center;
   margin-top: 50px;
 }
+=======
+.order-status-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.order-card {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.order-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.order-id {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+/* Status Box */
+.status-box {
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+.status-paid {
+  background: #d4edda;
+  color: #155724;
+}
+.status-confirmed {
+  background: #cce5ff;
+  color: #004085;
+}
+.status-delivered {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Items List */
+.items-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Total Section */
+.total-section {
+  margin: 10px 0 20px;
+  font-size: 18px;
+}
+
+/* Address */
+.address-box {
+  background: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.invoice-back-btn {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.invoice-back-btn:hover {
+  background: #0056b3;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading {
+  text-align: center;
+  margin-top: 50px;
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

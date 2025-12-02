@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .footer {
   background-color: #333;
   color: white;
@@ -5,3 +6,12 @@
   padding: 15px;
   margin-top: auto;
 }
+=======
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  margin-top: auto;
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea

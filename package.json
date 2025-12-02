@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "click2eat-customer",
   "homepage": "https://github.com/Thy9899/Click2Eat-Customer.git",
@@ -36,3 +37,43 @@
     "vite": "^7.1.2"
   }
 }
+=======
+{
+  "name": "click2eat-customer",
+  "homepage": "https://github.com/Thy9899/Click2Eat-Customer.git",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "bootstrap": "^5.3.8",
+    "boxicons": "^2.1.4",
+    "react": "^19.1.1",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.9.1",
+    "react-toastify": "^11.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.3.0",
+    "vite": "^7.1.2"
+  }
+}
+>>>>>>> 007b7f6c1bf4d38fcd9d2edaa09c27edd04a2cea
