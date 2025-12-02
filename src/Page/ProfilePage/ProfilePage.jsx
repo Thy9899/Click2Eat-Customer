@@ -95,7 +95,7 @@ const ProfilePage = () => {
       <div className={`profile-card-container ${showEdit ? "edit-mode" : ""}`}>
         {/* LEFT CARD */}
         <div className="profile-left">
-          {/* <img
+           <img
             className="profile-photo"
             src={
               customer.image
@@ -105,7 +105,7 @@ const ProfilePage = () => {
                 : "./Photos/profile.png"
             }
             alt="profile"
-          /> */}
+          /> 
 
           <h3 className="profile-title">{customer.username}</h3>
 
