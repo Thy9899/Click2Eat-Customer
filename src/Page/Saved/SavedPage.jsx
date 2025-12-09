@@ -15,7 +15,7 @@ const SavedPage = () => {
       <div className="saved-header">
         {/* Back Button */}
         <button className="btn-back" onClick={() => navigate("/")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+          <i className="bx  bx-chevron-left"></i>
           <span>Back</span>
         </button>
 
@@ -29,25 +29,9 @@ const SavedPage = () => {
           likedProducts.map((item) => (
             <div className="box saved-item" key={item.saved_id}>
               {/* Product Image */}
-              {/* <div className="image">
-                {item.image ? (
-                  <img
-                    src={
-                      item.image
-                        ? `https://click2eat-backend-saved-service.onrender.com/Images/${item.image}`
-                        : "./src/assets/icon/no-image.png"
-                    }
-                    alt={item.name}
-                  />
-                ) : (
-                  <img src="./src/assets/icon/no-image.png" alt="no image" />
-                )}
-              </div> */}
+
               <div className="image">
-                <img
-                  src={`https://click2eat-backend-saved-service.onrender.com/Images/${item.image}`}
-                  alt={item.name}
-                />
+                <img key={item.saved_id} src={item.image} alt={item.name} />
               </div>
 
               {/* Product Info */}

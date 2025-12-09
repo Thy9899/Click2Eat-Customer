@@ -98,10 +98,10 @@ const Checkout = () => {
   return (
     <div className="checkout-wrapper">
       <div className="checkout-header">
-        <button className="btn-back" onClick={() => navigate("/cart")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+        <div className="btn-back" onClick={() => navigate("/cart")}>
+          <i className="bx  bx-chevron-left"></i>
           <span>Back</span>
-        </button>
+        </div>
         <h2 className="page-title">🛒 Checkout</h2>
       </div>
 
@@ -158,10 +158,7 @@ const Checkout = () => {
               <p className="item-index">{index + 1}</p>
 
               <div className="item-image">
-                <img
-                  src={`https://click2eat-backend-product-service.onrender.com/Images/${item.image}`}
-                  alt={item.name}
-                />
+                <img src={`${item.image}`} alt={item.name} />
               </div>
 
               <div className="item-info">

@@ -35,10 +35,7 @@ const ProductModal = ({ onClose, onAdd }) => {
         <div className="productModal-grid">
           {products.map((p) => (
             <div className="productModal-card" key={p.product_id}>
-              <img
-                src={`https://click2eat-backend-product-service.onrender.com/Images/${p.image}`}
-                alt={p.name}
-              />
+              <img src={`${p.image}`} alt={p.name} />
               <span className="productModal-name">{p.name}</span>
               <p>${p.unit_price}</p>
               <button onClick={() => onAdd(p)}>Add</button>

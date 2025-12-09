@@ -144,7 +144,7 @@
 @media (max-width: 500px) {
   .popup-content {
     position: fixed;
-    top: 90px;
+    top: 70px;
     left: 0;
     right: 0;
     bottom: 0;

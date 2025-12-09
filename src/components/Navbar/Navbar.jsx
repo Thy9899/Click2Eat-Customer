@@ -48,7 +48,10 @@ const Navbar = ({ onSearch }) => {
       <div className="navbar">
         {/* Logo */}
         <div className="navbar-logo">
-          <img src="./src/Picture/logo.jpg" alt="Logo" />
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/004/565/906/non_2x/cool-and-modern-food-logo-design-free-vector.jpg"
+            alt="Logo"
+          />
         </div>
 
         {/* Mobile menu toggle */}
@@ -146,21 +149,7 @@ const Navbar = ({ onSearch }) => {
                 className="nav-profile-menu"
                 onClick={() => setShowProfile((prev) => !prev)}
               >
-                {/* <img
-                  src={
-                    customer.image
-                      ? customer.image.startsWith("http")
-                        ? customer.image
-                        : `https://click2eat-backend-customer-service.onrender.com/Images/${customer.image}`
-                      : "https://images.icon-icons.com/1154/PNG/96/1486564400-account_81513.png"
-                  }
-                  alt="profile"
-                /> */}
-
-                <img
-                  src={`https://click2eat-backend-customer-service.onrender.com/${customer.image}`}
-                  alt="profile"
-                />
+                <img src={customer.image} alt="profile" />
               </div>
             )}
 

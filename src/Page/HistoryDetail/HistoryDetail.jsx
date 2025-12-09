@@ -46,7 +46,7 @@ const HistoryDetail = () => {
     <div className="order-wrapper">
       <div className="header-order-status">
         <button className="btn-back" onClick={() => navigate("/history")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+          <i className="bx  bx-chevron-left"></i>
           <span>Back</span>
         </button>
         <h2 className="page-title">📦 Details</h2>

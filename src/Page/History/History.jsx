@@ -6,16 +6,16 @@ import { useNavigate } from "react-router-dom";
 const History = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedOrders, setSelectedOrders] = useState([]); // <-- NEW
-  const [selectAll, setSelectAll] = useState(false); // <-- NEW
+  const [selectedOrders, setSelectedOrders] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const navigate = useNavigate();
 
+  // Load orders on mount
   useEffect(() => {
     const loadOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-
         if (!token) {
           console.error("⚠ No token found");
           setLoading(false);
@@ -25,9 +25,7 @@ const History = () => {
         const res = await axios.get(
           "https://click2eat-backend-order-service.onrender.com/api/order",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -42,38 +40,30 @@ const History = () => {
     loadOrders();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-
-  // 👉 Handle Select All
+  // Select all checkbox
   const handleSelectAll = () => {
     const newState = !selectAll;
     setSelectAll(newState);
-
-    if (newState) {
-      setSelectedOrders(orders.map((o) => o._id));
-    } else {
-      setSelectedOrders([]);
-    }
+    setSelectedOrders(newState ? orders.map((o) => o._id) : []);
   };
 
-  // 👉 Handle individual checkbox
+  // Toggle individual checkbox
   const toggleSelect = (id) => {
     setSelectedOrders((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  // 👉 Delete selected orders
-  const handleDeleteSelected = async () => {
-    if (selectedOrders.length === 0) {
+  // Delete selected orders or single order
+  const handleDeleteSelected = async (ids = selectedOrders) => {
+    if (ids.length === 0) {
       alert("No orders selected.");
       return;
     }
 
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${selectedOrders.length} selected order(s)?`
+      `Are you sure you want to delete ${ids.length} order(s)?`
     );
-
     if (!confirmDelete) return;
 
     try {
@@ -82,26 +72,24 @@ const History = () => {
       await axios.delete(
         "http://localhost:5000/api/customerOrders/delete-multiple",
         {
-          data: { ids: selectedOrders }, // <-- send list of IDs
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          data: { ids },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       // Remove deleted orders from UI
-      setOrders((prev) =>
-        prev.filter((order) => !selectedOrders.includes(order._id))
-      );
+      setOrders((prev) => prev.filter((order) => !ids.includes(order._id)));
 
-      // Reset selection
-      setSelectedOrders([]);
-      setSelectAll(false);
+      // Reset selection if deleting selectedOrders
+      if (ids === selectedOrders) {
+        setSelectedOrders([]);
+        setSelectAll(false);
+      }
 
-      alert("Selected orders deleted successfully!");
+      alert("Order(s) deleted successfully!");
     } catch (err) {
       console.error("Delete error:", err.response?.data || err.message);
-      alert("Failed to delete orders.");
+      alert("Failed to delete order(s).");
     }
   };
 
@@ -109,88 +97,90 @@ const History = () => {
     <div className="history-wrapper">
       <div className="header-history">
         <button className="btn-back" onClick={() => navigate("/")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+          <i className="bx bx-chevron-left"></i>
           <span>Back</span>
         </button>
         <h2 className="page-title">⏰ Order History</h2>
       </div>
 
-      {/* Table */}
-      <div className="history-table-wrapper">
-        <table className="history-table">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selectAll}
-                  onChange={handleSelectAll}
-                />
-              </th>
-              <th>Order ID</th>
-              <th>Status</th>
-              <th>Total</th>
-              <th>Date</th>
-              <th>Action</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {orders.length === 0 && (
+      {loading ? (
+        <div className="spinner-center">
+          <p>Loading History...</p>
+        </div>
+      ) : (
+        <div className="history-table-wrapper">
+          <table className="history-table">
+            <thead>
               <tr>
-                <td colSpan="6" className="empty-message">
-                  No orders found.
-                </td>
-              </tr>
-            )}
-
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>
+                <th>
                   <input
                     type="checkbox"
-                    checked={selectedOrders.includes(order._id)}
-                    onChange={() => toggleSelect(order._id)}
+                    checked={selectAll}
+                    onChange={handleSelectAll}
                   />
-                </td>
-
-                <td>{order._id}</td>
-                <td>{order.status || "Processing"}</td>
-                <td>${order.total_price.toFixed(2)}</td>
-                <td>{new Date(order.createdAt).toLocaleString()}</td>
-
-                <td>
-                  <button className="btn-delete">
-                    <i className="bx bxs-trash"></i>
-                  </button>
-                </td>
-
-                <td>
-                  <div
-                    className="history-btn-detail"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/history-detail/${order._id}`);
-                    }}
-                  >
-                    Details
-                  </div>
-                </td>
+                </th>
+                <th>Order ID</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Details</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
 
-        <button
-          className="btn-delete-selected"
-          onClick={handleDeleteSelected}
-          disabled={selectedOrders.length === 0}
-        >
-          Delete Selected ({selectedOrders.length}){" "}
-          <i className="bx bxs-trash"></i>
-        </button>
-      </div>
+            <tbody>
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="empty-message">
+                    No orders found.
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order) => (
+                  <tr key={order._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedOrders.includes(order._id)}
+                        onChange={() => toggleSelect(order._id)}
+                      />
+                    </td>
+                    <td>{order._id}</td>
+                    <td>{order.status || "Processing"}</td>
+                    <td>${order.total_price?.toFixed(2)}</td>
+                    <td>{new Date(order.createdAt).toLocaleString()}</td>
+                    <td>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteSelected([order._id])}
+                      >
+                        <i className="bx bxs-trash"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <div
+                        className="history-btn-detail"
+                        onClick={() => navigate(`/history-detail/${order._id}`)}
+                      >
+                        Details
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+
+          <button
+            className="btn-delete-selected"
+            onClick={handleDeleteSelected}
+            disabled={selectedOrders.length === 0}
+          >
+            Delete Selected ({selectedOrders.length}){" "}
+            <i className="bx bxs-trash"></i>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

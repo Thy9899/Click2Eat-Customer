@@ -143,7 +143,7 @@ const ProductDetail = () => {
       {/* Back */}
       <div className="header-product-detail">
         <button className="btn-back" onClick={() => navigate("/")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+          <i className="bx  bx-chevron-left"></i>
           <span>Back</span>
         </button>
         <h2 className="page-title">Product Detail</h2>
@@ -152,10 +152,7 @@ const ProductDetail = () => {
       {/* Main Content */}
       <div className="product-detail-container">
         <div className="product-image">
-          <img
-            src={`https://click2eat-backend-product-service.onrender.com/Images/${product.image}`}
-            alt={product.name}
-          />
+          <img src={`${product.image}`} alt={product.name} />
         </div>
 
         <div className="product-info">
@@ -224,10 +221,7 @@ const ProductDetail = () => {
               onClick={() => navigate(`/product/${item.product_id}`)}
             >
               <div className="suggest-img-wrapper">
-                <img
-                  src={`https://click2eat-backend-product-service.onrender.com/Images/${item.image}`}
-                  alt={item.name}
-                />
+                <img src={`${item.image}`} alt={item.name} />
 
                 {/* Bookmark icon */}
                 <button

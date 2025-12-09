@@ -2,7 +2,9 @@
   text-align: center;
   /* padding: 40px 20px; */
   font-family: "Arial", sans-serif;
-  padding: 0 9%;
+  /* padding: 0 9%; */
+  width: 80%;
+  margin: auto;
 }
 
 .contact-title {

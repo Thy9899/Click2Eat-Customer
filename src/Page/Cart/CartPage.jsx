@@ -22,10 +22,11 @@ const CartPage = () => {
     <div className="cart-wrapper">
       {/* HEADER */}
       <div className="header-cart-detail">
-        <button className="btn-back" onClick={() => navigate("/")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+        <div className="btn-back" onClick={() => navigate("/")}>
+          <i className="bx  bx-chevron-left"></i>
           <span>Back</span>
-        </button>
+        </div>
+
         <h2 className="page-title">Product Detail</h2>
       </div>
 
@@ -57,10 +58,7 @@ const CartPage = () => {
                   <span>{index + 1}</span>
 
                   <div className="product-cart-info">
-                    <img
-                      src={`https://click2eat-backend-product-service.onrender.com/Images/${item.image}`}
-                      alt={item.name}
-                    />
+                    <img src={`${item.image}`} alt={item.name} />
                     <span>{item.name}</span>
                   </div>
 

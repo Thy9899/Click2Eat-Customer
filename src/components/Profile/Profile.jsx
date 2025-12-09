@@ -13,20 +13,7 @@ const Profile = ({ logout }) => {
       <div className="sub-menu">
         {/* Customer info */}
         <div className="user-info">
-          {/* <img
-            src={
-              customer.image
-                ? customer.image.startsWith("http")
-                  ? customer.image
-                  : `https://click2eat-backend-customer-service.onrender.com/Images/${customer.image}`
-                : "./Photos/profile.png"
-            }
-            alt={customer.username}
-          /> */}
-          <img
-            src={`https://click2eat-backend-customer-service.onrender.com/Images/${customer.image}`}
-            alt={customer.username}
-          />
+          <img src={customer.image} alt={customer.username} />
           <h3>{customer.username}</h3>
         </div>
         <hr />

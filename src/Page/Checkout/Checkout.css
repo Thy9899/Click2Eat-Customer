@@ -16,6 +16,10 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+.checkout-header i {
+  font-size: 24px;
+}
+
 .btn-back {
   display: flex;
   align-items: center;

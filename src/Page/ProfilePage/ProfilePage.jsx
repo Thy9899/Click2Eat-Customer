@@ -86,7 +86,7 @@ const ProfilePage = () => {
     <div className="profile-container">
       <div className="profile-header">
         <button className="btn-back" onClick={() => navigate("/")}>
-          <img src="./src/assets/icon/back.png" alt="back" />
+          <i className="bx  bx-chevron-left"></i>
           <span>Back</span>
         </button>
         <h2 className="page-title">🧑‍💼 Profile</h2>
@@ -95,17 +95,17 @@ const ProfilePage = () => {
       <div className={`profile-card-container ${showEdit ? "edit-mode" : ""}`}>
         {/* LEFT CARD */}
         <div className="profile-left">
-          {/* <img
+          <img
             className="profile-photo"
             src={
               customer.image
                 ? customer.image.startsWith("http")
                   ? customer.image
-                  : `https://click2eat-backend-customer-service.onrender.com/Images/${customer.image}`
+                  : `${customer.image}`
                 : "./Photos/profile.png"
             }
             alt="profile"
-          /> */}
+          />
 
           <h3 className="profile-title">{customer.username}</h3>
 
