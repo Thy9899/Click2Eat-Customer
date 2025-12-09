@@ -10,7 +10,7 @@ const API_URL =
   "https://click2eat-backend-product-service.onrender.com/api/products";
 
 const Dashboard = ({ searchTerm }) => {
-  // ✅ receive prop
+  //  receive prop
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -22,23 +22,23 @@ const Dashboard = ({ searchTerm }) => {
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  // ✅ Filter by category first
+  //  Filter by category first
   let filteredProducts = selectedCategory
-    ? products.filter((p) => p.category === selectedCategory)
+    ? products.filter((product) => product.category === selectedCategory)
     : products;
 
-  // ✅ Then filter by search term
+  //  Then filter by search term
   if (searchTerm) {
-    filteredProducts = filteredProducts.filter((p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    filteredProducts = filteredProducts.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
 
   return (
     <div>
       <Header />
-      <Menu onSelectCategory={setSelectedCategory} /> {/* ✅ Pass callback */}
-      <Product products={filteredProducts} /> {/* ✅ Pass products */}
+      <Menu onSelectCategory={setSelectedCategory} /> {/*  Pass callback */}
+      <Product products={filteredProducts} /> {/*  Pass products */}
       <ContactUs />
       <Footer />
     </div>

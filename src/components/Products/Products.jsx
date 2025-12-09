@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const API_URL =
   "https://click2eat-backend-product-service.onrender.com/api/products";
 
-const Products = () => {
+const Products = ({ products }) => {
   const { addToCart } = useCart();
   const { toggleLike, isLiked } = useSaved();
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const Products = () => {
         <div className="product-spinner-border"></div>
       ) : (
         <div className="box-container">
-          {productsData.map((product) => (
+          {products.map((product) => (
             <div
               className="product-card"
               key={product.product_id}

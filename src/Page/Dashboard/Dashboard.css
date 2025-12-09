@@ -1,0 +1,33 @@
+/* Spinner container centered in parent */
+.product-spinner-border {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* adjust height to match container */
+  margin: auto;
+}
+
+/* Spinner style */
+.product-spinner-border {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.4em solid #f3f3f3; /* light gray */
+  border-top: 0.4em solid #17a2b8; /* blue-ish for text-info */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Spinner color for text-info */
+.product-spinner-border {
+  border-top-color: #17a2b8; /* Bootstrap info color */
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

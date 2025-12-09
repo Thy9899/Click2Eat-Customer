@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Menu.css";
 
 const Menu = ({ onSelectCategory }) => {
+  const [activeCategory, setActiveCategory] = useState(null); // Track active category
+
   const menuItems = [
     { id: 1, name: "All", icon: "🍽️" },
     { id: 2, name: "Burger", icon: "🍔" },
@@ -13,9 +15,11 @@ const Menu = ({ onSelectCategory }) => {
 
   const handleClick = (name) => {
     if (name === "All") {
-      onSelectCategory(null); // ✅ null = show all products
+      onSelectCategory(null);
+      setActiveCategory(null);
     } else {
       onSelectCategory(name);
+      setActiveCategory(name);
     }
   };
 
@@ -27,7 +31,9 @@ const Menu = ({ onSelectCategory }) => {
       <div className="menu-grid">
         {menuItems.map((item) => (
           <div
-            className="menu-card"
+            className={`menu-card ${
+              activeCategory === item.name ? "active" : ""
+            }`}
             key={item.id}
             onClick={() => handleClick(item.name)}
           >
