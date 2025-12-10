@@ -33,10 +33,10 @@ export const SavedProvider = ({ children }) => {
 
   // ✅ Toggle like/save product
   const toggleLike = async (product) => {
+    // Check customer login
     const token = localStorage.getItem("token");
     if (!token) {
-      console.warn("User not authenticated");
-      return;
+      alert("Please login first to save products.");
     }
 
     const exists = likedProducts.find(

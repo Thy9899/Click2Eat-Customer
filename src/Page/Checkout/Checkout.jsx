@@ -47,10 +47,9 @@ const Checkout = () => {
   // useEffect(() => {
   //   const token = localStorage.getItem("token");
   //   if (!token) {
-  //     toast.error("Please login first to continue checkout.");
-  //     navigate("/login");
+  //     alert("Please login first to continue checkout.");
   //   }
-  // }, [navigate]);
+  // }, []);
 
   // -----------------------------
   // Handle input changes for shipping info
@@ -64,6 +63,12 @@ const Checkout = () => {
   // -----------------------------
   const handleConfirmCart = async () => {
     if (cart.length === 0) return toast.error("Your cart is empty.");
+
+    // Check customer login
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please login first to continue checkout.");
+    }
 
     // Check for missing fields
     const missingFields = Object.entries(shippingInfo)

@@ -43,7 +43,6 @@ const Home = () => {
             element={<History_Detail />}
           />
           <Route path="/map" element={<MapView />} />
-          <Route path="/login" element={<Auth />}></Route>
         </Routes>
       </div>
     </div>
