@@ -1,10 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./Auth.css";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
 const Auth = ({ onClose }) => {
   const { login, register } = useContext(AuthContext);
+
   const [activeTab, setActiveTab] = useState("login");
+  const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
     email: "",
     username: "",
@@ -13,33 +18,64 @@ const Auth = ({ onClose }) => {
     remember: false,
   });
 
+  // ----------------------------
+  // Handle Input Change
+  // ----------------------------
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
+  // ----------------------------
+  // Submit (Login / Register)
+  // ----------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading immediately when user clicks
+
     try {
       if (activeTab === "login") {
         await login(form.email, form.password);
-        //alert("Login successful!");
-        window.location.reload(); //refresh page
+        window.location.reload(); // refresh after login
       } else {
         if (form.password !== form.confirmPassword) {
           alert("Passwords do not match!");
+          setLoading(false);
           return;
         }
+
         await register(form.email, form.password, form.username);
         alert("Registration successful!");
       }
+
       onClose();
     } catch (err) {
-      // handle axios error if using axios
       alert(err.response?.data?.message || err.message);
+    }
+
+    setLoading(false); // Stop loading after backend finishes
+  };
+
+  // ----------------------------
+  // Optional (remove if unused)
+  // ----------------------------
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      await axios.post(
+        `https://click2eat-backend-customer-service.onrender.com/api/customers/login`
+      );
+    } catch (error) {
+      toast.error("Error fetching Customers");
     }
   };
 
+  // ----------------------------
+  // UI
+  // ----------------------------
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-content" onClick={(e) => e.stopPropagation()}>
@@ -75,6 +111,7 @@ const Auth = ({ onClose }) => {
                 placeholder="you@example.com"
                 value={form.email}
                 onChange={handleChange}
+                disabled={loading}
                 required
               />
             </div>
@@ -91,6 +128,7 @@ const Auth = ({ onClose }) => {
                   placeholder="Your username"
                   value={form.username}
                   onChange={handleChange}
+                  disabled={loading}
                   required
                 />
               </div>
@@ -104,9 +142,10 @@ const Auth = ({ onClose }) => {
               <input
                 type="password"
                 name="password"
-                placeholder="•••••••"
+                placeholder="••••••••"
                 value={form.password}
                 onChange={handleChange}
+                disabled={loading}
                 required
               />
             </div>
@@ -120,9 +159,10 @@ const Auth = ({ onClose }) => {
                 <input
                   type="password"
                   name="confirmPassword"
-                  placeholder="•••••••"
+                  placeholder="••••••••"
                   value={form.confirmPassword}
                   onChange={handleChange}
+                  disabled={loading}
                   required
                 />
               </div>
@@ -137,6 +177,7 @@ const Auth = ({ onClose }) => {
                   name="remember"
                   checked={form.remember}
                   onChange={handleChange}
+                  disabled={loading}
                 />{" "}
                 Remember me
               </label>
@@ -146,9 +187,11 @@ const Auth = ({ onClose }) => {
             </div>
           )}
 
+          {/* Loading or button */}
           <button type="submit" className="submit-btn">
             {activeTab === "login" ? "Sign in" : "Register"}
           </button>
+          {loading ? <div className="auth-line-loader"></div> : ""}
         </form>
       </div>
     </div>

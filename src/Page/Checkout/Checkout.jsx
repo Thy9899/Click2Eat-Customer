@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../../context/CartContext";
 import { saveLastOrderToLocal } from "../../utils/localOrder";
@@ -8,39 +8,55 @@ import "./Checkout.css";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { cart, confirmCart, removeRowCart, clearCart } = useCart();
+  // -----------------------------
+  // Cart context
+  // -----------------------------
+  const { cart, confirmCart } = useCart();
 
-  const [loading, setLoading] = useState(false);
-  const [shippingMethod, setShippingMethod] = useState("delivery");
+  // -----------------------------
+  // Component state
+  // -----------------------------
+  const [loading, setLoading] = useState(false); // Loading state for API call
+  const [shippingMethod, setShippingMethod] = useState("delivery"); // Delivery or Pickup
 
+  // Shipping info form state
   const [shippingInfo, setShippingInfo] = useState({
     fullName: "",
     phone: "",
     city: "",
     state: "",
     zipCode: "",
-    location: "",
   });
 
-  // ---------------------------
-  // IMPORTANT: Move these HERE
-  // ---------------------------
+  // Selected location from MapView
+  const selectedLocation = location.state?.locationCode || "";
+
+  // -----------------------------
+  // Calculated totals
+  // -----------------------------
   const subtotal = cart.reduce(
     (sum, item) => sum + item.unit_price * item.quantity,
     0
   );
-
-  const delivery = 2;
+  const delivery = 2; // fixed delivery cost
   const total = subtotal + delivery;
 
+  // -----------------------------
+  // Handle input changes for shipping info
+  // -----------------------------
   const handleChange = (e) => {
     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
   };
 
+  // -----------------------------
+  // Confirm order & send to API
+  // -----------------------------
   const handleConfirmCart = async () => {
     if (cart.length === 0) return toast.error("Your cart is empty.");
 
+    // Check for missing fields
     const missingFields = Object.entries(shippingInfo)
       .filter(([_, value]) => !value.trim())
       .map(([key]) => key);
@@ -52,7 +68,13 @@ const Checkout = () => {
       return;
     }
 
+    if (!selectedLocation) {
+      toast.error("Please select a location on the map.");
+      return;
+    }
+
     setLoading(true);
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -61,19 +83,26 @@ const Checkout = () => {
         return;
       }
 
+      // -----------------------------
+      // Prepare payload for API
+      // -----------------------------
       const payload = {
         items: cart.map((item) => ({
           product_id: item.product_id,
           quantity: item.quantity,
           unit_price: item.unit_price,
         })),
-        shipping_address: shippingInfo,
+        shipping_address: {
+          ...shippingInfo,
+          location: selectedLocation, // include selected location
+        },
         payment_method: shippingMethod,
         subtotal,
         delivery,
         total,
       };
 
+      // Call API to create order
       const res = await axios.post(
         "https://click2eat-backend-order-service.onrender.com/api/order",
         payload,
@@ -81,6 +110,7 @@ const Checkout = () => {
       );
 
       if ([200, 201].includes(res.status)) {
+        // Save order in cart context and local storage
         confirmCart(res.data.order);
         saveLastOrderToLocal(res.data.order);
 
@@ -97,41 +127,63 @@ const Checkout = () => {
 
   return (
     <div className="checkout-wrapper">
+      {/* -----------------------------
+          Header / Back button
+      ----------------------------- */}
       <div className="checkout-header">
         <div className="btn-back" onClick={() => navigate("/cart")}>
-          <i className="bx  bx-chevron-left"></i>
+          <i className="bx bx-chevron-left"></i>
           <span>Back</span>
         </div>
         <h2 className="page-title">🛒 Checkout</h2>
       </div>
 
       <div className="checkout-container">
+        {/* -----------------------------
+            Shipping Info Section
+        ----------------------------- */}
         <div className="checkout-section">
           <span className="section-title">Checkout</span>
-
           <hr />
 
           <span>Shipping Info</span>
-          <div className="randio">
-            <label>
+
+          {/* Shipping Method */}
+          <div className="radio">
+            <label
+              className={
+                shippingMethod === "delivery"
+                  ? "radio-card active"
+                  : "radio-card"
+              }
+            >
               <input
                 type="radio"
+                name="shipping"
                 checked={shippingMethod === "delivery"}
                 onChange={() => setShippingMethod("delivery")}
               />
-              Delivery
+              <span className="circle"></span>
+              <span>Delivery</span>
             </label>
-            <label>
+
+            <label
+              className={
+                shippingMethod === "pickup" ? "radio-card active" : "radio-card"
+              }
+            >
               <input
                 type="radio"
+                name="shipping"
                 checked={shippingMethod === "pickup"}
                 onChange={() => setShippingMethod("pickup")}
               />
-              Pickup
+              <span className="circle"></span>
+              <span>Pickup</span>
             </label>
           </div>
 
-          {/* Inputs */}
+          {/* Shipping Form Inputs */}
           <div className="customer-info">
             {Object.keys(shippingInfo).map((field) => (
               <input
@@ -142,13 +194,23 @@ const Checkout = () => {
                 placeholder={field.replace(/([A-Z])/g, " $1")}
               />
             ))}
+
+            {/* Selected location from Map */}
+            <input
+              type="text"
+              value={selectedLocation}
+              placeholder="Click to select location"
+              readOnly
+              onClick={() => navigate("/map")}
+            />
           </div>
         </div>
 
-        {/* CART REVIEW */}
+        {/* -----------------------------
+            Cart Review Section
+        ----------------------------- */}
         <div className="checkout-section">
           <span className="section-title">Review your cart</span>
-
           <hr />
 
           {cart.length === 0 && <p>Your cart is empty.</p>}
@@ -158,7 +220,7 @@ const Checkout = () => {
               <p className="item-index">{index + 1}</p>
 
               <div className="item-image">
-                <img src={`${item.image}`} alt={item.name} />
+                <img src={item.image} alt={item.name} />
               </div>
 
               <div className="item-info">
@@ -172,18 +234,10 @@ const Checkout = () => {
               <p className="item-price">
                 USD {(item.unit_price * item.quantity).toFixed(2)}
               </p>
-
-              {/* <div className="checkout-minus-item">
-                <button
-                  onClick={() => removeRowCart(item.product_id)}
-                  disabled={loading}
-                >
-                  <i className="bx bxs-trash"></i>
-                </button> 
-              </div>*/}
             </div>
           ))}
 
+          {/* Summary */}
           <div className="summary-row">
             <span className="checkout-span">Subtotal</span>
             <span>USD {subtotal.toFixed(2)}</span>
@@ -199,17 +253,13 @@ const Checkout = () => {
             <span>USD {total.toFixed(2)}</span>
           </div>
 
-          {/* Buttons */}
+          {/* Confirm Button */}
           <button
             onClick={handleConfirmCart}
             disabled={loading || cart.length === 0}
           >
             {loading ? "Confirming..." : "Confirm & Pay"}
           </button>
-
-          {/* <button onClick={clearCart} disabled={loading}>
-            Clear Cart
-          </button> */}
         </div>
       </div>
     </div>

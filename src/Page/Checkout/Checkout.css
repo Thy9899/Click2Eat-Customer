@@ -73,7 +73,7 @@
 }
 
 /* Radio buttons layout */
-.randio {
+/* .randio {
   display: flex;
   gap: 20px;
   margin: 15px 0;
@@ -85,6 +85,52 @@
   align-items: center;
   font-size: 15px;
   cursor: pointer;
+} */
+
+.radio {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.radio-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #e7f0ef;
+  cursor: pointer;
+  transition: 0.25s;
+  font-weight: 500;
+  width: 45%;
+}
+
+/* Active Style */
+.radio-card.active {
+  background: #4ec1c799;
+}
+
+/* Hide original radio */
+.radio-card input {
+  display: none;
+}
+
+/* Custom round indicator */
+.circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 4px solid #cfd8dc;
+  background: #e8edf5;
+  transition: 0.25s;
+}
+
+/* When active */
+.radio-card.active .circle {
+  border-color: #0adaff;
+  background: #0a75ff;
 }
 
 /* Customer input fields */

@@ -72,7 +72,7 @@ const Payment = () => {
         <button onClick={() => handlePayment("Credit Card")}>
           Pay with Credit Card
         </button>
-        <button onClick={() => handlePayment("Cash")}>Pay with Cash</button>
+        <button onClick={() => navigate("/")}>Pay with Cash</button>
       </div>
     </div>
   );

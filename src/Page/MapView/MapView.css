@@ -1,0 +1,73 @@
+/* Wrapper */
+.map-wrapper {
+  width: 80%;
+  margin: 10px auto;
+  font-family: "Inter", sans-serif;
+}
+
+.map-container {
+  display: flex;
+  gap: 25px;
+  padding: 0 10px;
+}
+
+.map-card {
+  flex: 3;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+/* Buttons */
+.map-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.map-btn.primary {
+  background-color: #2196f3;
+  color: white;
+}
+
+.map-btn.confirm {
+  margin-top: 20px;
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Map box */
+#map {
+  height: 450px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+}
+
+/* Location details */
+.location-details {
+  /* margin-top: 20px;
+  background: #fafafa;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0; */
+
+  flex: 1;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  height: fit-content;
+}
+
+.location-details h2 {
+  margin-bottom: 10px;
+}
+
+.location-details p {
+  margin: 5px 0;
+}

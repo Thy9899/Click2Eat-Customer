@@ -13,6 +13,7 @@ import OrderStatus from "../Page/Order/OrderStatus";
 import Invoice from "../Page/Invoice/Invoice";
 import History_Detail from "../Page/HistoryDetail/HistoryDetail";
 import ProductDetial from "../Page/ProductDetail/ProductDetial";
+import MapView from "../Page/MapView/MapView";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,6 +41,7 @@ const Home = () => {
             path="/history-detail/:order_id"
             element={<History_Detail />}
           />
+          <Route path="/map" element={<MapView />} />
         </Routes>
       </div>
     </div>
