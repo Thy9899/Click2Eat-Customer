@@ -12,10 +12,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #8894e2;
+  background-color: #a8b3ff;
   /* background: transparent; */
   /* backdrop-filter: blur(20px); */
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #a3bcf5;
   font-family: "Poppins", sans-serif;
   height: 90px;
   flex-wrap: wrap;

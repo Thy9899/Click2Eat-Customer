@@ -57,10 +57,12 @@ export const CartProvider = ({ children }) => {
         )
         .filter((item) => item.quantity > 0)
     );
+    localStorage.removeItem("lastOrder");
   };
 
   const removeRowCart = (productId) => {
     setCart((prev) => prev.filter((item) => item.product_id !== productId));
+    localStorage.removeItem("lastOrder");
   };
 
   const clearCart = () => {

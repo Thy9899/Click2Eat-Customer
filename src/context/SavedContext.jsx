@@ -14,9 +14,12 @@ export const SavedProvider = ({ children }) => {
       if (!token) return; // user not logged in
 
       try {
-        const res = await axios.get("http://localhost:5004/api/saved", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://click2eat-backend-saved-service.onrender.com/api/saved",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const list = res.data.list || [];
         setLikedProducts(list);
@@ -44,7 +47,7 @@ export const SavedProvider = ({ children }) => {
       if (exists) {
         // DELETE saved item (gateway will forward to microservice)
         await axios.delete(
-          `http://localhost:5004/api/saved/${exists.saved_id}`,
+          `https://click2eat-backend-saved-service.onrender.com/api/saved/${exists.saved_id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -78,7 +81,7 @@ export const SavedProvider = ({ children }) => {
         }
 
         const res = await axios.post(
-          "http://localhost:5004/api/saved",
+          "https://click2eat-backend-saved-service.onrender.com/api/saved",
           payload,
           {
             headers,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import "./HistoryDetail.css";
 
 const HistoryDetail = () => {
   const { order_id } = useParams(); // ✅ get order_id from URL
@@ -39,9 +40,6 @@ const HistoryDetail = () => {
     loadOrder();
   }, [order_id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!order) return <p>No order found.</p>; // ✅ handles null
-
   return (
     <div className="order-wrapper">
       <div className="header-order-status">
@@ -51,47 +49,49 @@ const HistoryDetail = () => {
         </button>
         <h2 className="page-title">📦 Details</h2>
       </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : !order ? (
+        <p>No order found.</p>
+      ) : (
+        <div className="history-detail">
+          <p>
+            <strong>Order ID:</strong> {order._id}
+          </p>
+          <p>
+            <strong>Status:</strong> {order.status || "Processing"}{" "}
+          </p>
+          <p>
+            <strong>Customer Name:</strong> {order.shipping_address?.fullName}
+          </p>
 
-      <div className="history-detail">
-        <p>
-          <strong>Order ID:</strong> {order._id}
-        </p>
-        <p>
-          <strong>Order ID:</strong> {order.name}
-        </p>
-        <p>
-          <strong>Status:</strong> {order.status || "Processing"}{" "}
-        </p>
-        <p>
-          <strong>Customer Name:</strong> {order.shipping_address?.fullName}
-        </p>
+          <p>
+            <strong>Phone Number:</strong> {order.shipping_address?.phone}
+          </p>
 
-        <p>
-          <strong>Phone Number:</strong> {order.shipping_address?.phone}
-        </p>
-
-        <p>
-          <strong>Total:</strong> ${order.total_price?.toFixed(2)}
-        </p>
-        <p>
-          <strong>Payment Method:</strong> {order.payment_method || "N/A"}
-        </p>
-        <p>
-          <strong>Payment Status:</strong> {order.payment_status || "N/A"}
-        </p>
-        <p>
-          <strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}
-        </p>
-        <button
-          className="btn-invoice"
-          onClick={(e) => {
-            e.stopPropagation(); // stop triggering order card click
-            navigate(`/invoice/${order._id}`);
-          }}
-        >
-          View Invoice
-        </button>
-      </div>
+          <p>
+            <strong>Total:</strong> ${order.total_price?.toFixed(2)}
+          </p>
+          <p>
+            <strong>Payment Method:</strong> {order.payment_method || "N/A"}
+          </p>
+          <p>
+            <strong>Payment Status:</strong> {order.payment_status || "N/A"}
+          </p>
+          <p>
+            <strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}
+          </p>
+          <button
+            className="btn-invoice"
+            onClick={(e) => {
+              e.stopPropagation(); // stop triggering order card click
+              navigate(`/invoice/${order._id}`);
+            }}
+          >
+            View Invoice
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -30,7 +30,7 @@
 }
 
 .payment-buttons button {
-  padding: 12px 25px;
+  padding: 0 25px;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
@@ -38,6 +38,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
+  display: flex;
 }
 
 .payment-buttons button:hover {
@@ -50,6 +51,16 @@
 
 .payment-buttons button:last-child {
   background-color: #28a745; /* Cash */
+}
+
+.payment-buttons img {
+  width: 35px;
+  height: 35px;
+  margin: 0 10px;
+}
+
+.payment-buttons p {
+  color: #fff;
 }
 
 /* Animations */

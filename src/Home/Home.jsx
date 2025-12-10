@@ -14,6 +14,7 @@ import Invoice from "../Page/Invoice/Invoice";
 import History_Detail from "../Page/HistoryDetail/HistoryDetail";
 import ProductDetial from "../Page/ProductDetail/ProductDetial";
 import MapView from "../Page/MapView/MapView";
+import Auth from "../components/Auth/Auth";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,6 +43,7 @@ const Home = () => {
             element={<History_Detail />}
           />
           <Route path="/map" element={<MapView />} />
+          <Route path="/login" element={<Auth />}></Route>
         </Routes>
       </div>
     </div>

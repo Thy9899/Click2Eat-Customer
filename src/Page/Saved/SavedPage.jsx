@@ -35,8 +35,14 @@ const SavedPage = () => {
               </div>
 
               {/* Product Info */}
-              <h3>{item.name}</h3>
-              <div className="price">${item.price}</div>
+              <p>
+                <b>{item.name}</b>
+              </p>
+              <p className="desc">{item.description?.substring(0, 45)}...</p>
+              <div className="price">
+                ${item.unit_price}
+                {item.price && <span>${item.price}</span>}
+              </div>
 
               {/* Buttons */}
               <div className="btn">

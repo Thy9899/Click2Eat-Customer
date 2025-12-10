@@ -90,10 +90,7 @@ const Invoice = () => {
           <p>Name: {order.shipping_address?.fullName}</p>
           <p>Phone: {order.shipping_address?.phone}</p>
           <p>Location: {order.shipping_address?.location}</p>
-          <p>
-            {order.shipping_address?.city}, {order.shipping_address?.state}{" "}
-            {order.shipping_address?.zipCode}
-          </p>
+          <p>City: {order.shipping_address?.city}</p>
         </div>
 
         <button className="invoice-back-btn" onClick={() => navigate("/")}>

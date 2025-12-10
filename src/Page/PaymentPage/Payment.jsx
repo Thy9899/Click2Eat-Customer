@@ -70,9 +70,19 @@ const Payment = () => {
       <p>Payment Method: {order.payment_method}</p>
       <div className="payment-buttons">
         <button onClick={() => handlePayment("Credit Card")}>
-          Pay with Credit Card
+          <p>Pay with Credit Card</p>
+          <img
+            src="https://images.icon-icons.com/2104/PNG/512/credit_card_icon_129121.png"
+            alt=""
+          />
         </button>
-        <button onClick={() => navigate("/")}>Pay with Cash</button>
+        <button onClick={() => navigate("/")}>
+          <p>Pay with Cash</p>
+          <img
+            src="https://images.icon-icons.com/403/PNG/512/cash_40532.png"
+            alt=""
+          />
+        </button>
       </div>
     </div>
   );

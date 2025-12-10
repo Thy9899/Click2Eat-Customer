@@ -26,8 +26,6 @@ const Checkout = () => {
     fullName: "",
     phone: "",
     city: "",
-    state: "",
-    zipCode: "",
   });
 
   // Selected location from MapView
@@ -42,6 +40,17 @@ const Checkout = () => {
   );
   const delivery = 2; // fixed delivery cost
   const total = subtotal + delivery;
+
+  // -----------------------------
+  // Redirect if not logged in
+  // -----------------------------
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     toast.error("Please login first to continue checkout.");
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
 
   // -----------------------------
   // Handle input changes for shipping info
@@ -146,7 +155,9 @@ const Checkout = () => {
           <span className="section-title">Checkout</span>
           <hr />
 
-          <span>Shipping Info</span>
+          <span>
+            <b>Shipping Information :</b>
+          </span>
 
           {/* Shipping Method */}
           <div className="radio">
@@ -183,6 +194,26 @@ const Checkout = () => {
             </label>
           </div>
 
+          <span>
+            <b>Your Loaction : </b>
+          </span>
+
+          {/* Shipping Form Inputs */}
+          <div className="customer-info">
+            {/* Selected location from Map */}
+            <input
+              type="text"
+              value={selectedLocation}
+              placeholder="Click to select location"
+              readOnly
+              onClick={() => navigate("/map")}
+            />
+          </div>
+
+          <span>
+            <b>Customer Information : </b>
+          </span>
+
           {/* Shipping Form Inputs */}
           <div className="customer-info">
             {Object.keys(shippingInfo).map((field) => (
@@ -194,15 +225,6 @@ const Checkout = () => {
                 placeholder={field.replace(/([A-Z])/g, " $1")}
               />
             ))}
-
-            {/* Selected location from Map */}
-            <input
-              type="text"
-              value={selectedLocation}
-              placeholder="Click to select location"
-              readOnly
-              onClick={() => navigate("/map")}
-            />
           </div>
         </div>
 
