@@ -212,6 +212,7 @@ const Checkout = () => {
               placeholder="Click to select location"
               readOnly
               onClick={() => navigate("/map")}
+              required
             />
           </div>
 
@@ -228,6 +229,7 @@ const Checkout = () => {
                 value={shippingInfo[field]}
                 onChange={handleChange}
                 placeholder={field.replace(/([A-Z])/g, " $1")}
+                required
               />
             ))}
           </div>

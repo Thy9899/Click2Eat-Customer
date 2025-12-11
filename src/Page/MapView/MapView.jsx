@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import "./MapView.css";
 
 const MapView = () => {
@@ -10,6 +11,15 @@ const MapView = () => {
 
   const [locationData, setLocationData] = useState(null);
 
+  // YOUR RESTAURANT / DELIVERY CENTER ORIGIN
+  const DELIVERY_ORIGIN = {
+    lat: 11.5564,
+    lon: 104.9282,
+  };
+
+  // -----------------------------
+  // 1. Initialize Map
+  // -----------------------------
   useEffect(() => {
     if (mapRef.current) return;
 
@@ -20,6 +30,7 @@ const MapView = () => {
       attribution: "© OpenStreetMap contributors",
     }).addTo(map);
 
+    // Click on map
     map.on("click", async (e) => {
       const { lat, lng } = e.latlng;
 
@@ -38,6 +49,9 @@ const MapView = () => {
     });
   }, []);
 
+  // -----------------------------
+  // 2. Get My Current Location
+  // -----------------------------
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation not supported");
@@ -65,24 +79,72 @@ const MapView = () => {
     });
   };
 
-  const handleConfirm = () => {
+  // -----------------------------
+  // 3. Calculate Distance & Duration via OSRM API
+  // -----------------------------
+  const calculateRoute = async (destLat, destLon) => {
+    try {
+      const url = `https://router.project-osrm.org/route/v1/driving/${DELIVERY_ORIGIN.lon},${DELIVERY_ORIGIN.lat};${destLon},${destLat}?overview=false`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (!data.routes || data.routes.length === 0) {
+        alert("No route found");
+        return null;
+      }
+
+      const route = data.routes[0];
+
+      return {
+        distance: route.distance, // meters
+        duration: route.duration, // seconds
+      };
+    } catch (err) {
+      console.error(err);
+      alert("Error calculating route");
+      return null;
+    }
+  };
+
+  // -----------------------------
+  // 4. Confirm Location + Route Calculation
+  // -----------------------------
+  const handleConfirm = async () => {
     if (!locationData) {
       alert("Please pin a location first");
       return;
     }
 
-    const code = `${locationData.lat}, ${locationData.lon}`;
-    navigate("/checkout", { state: { locationCode: code } });
+    const destLat = locationData.lat;
+    const destLon = locationData.lon;
+
+    const routeInfo = await calculateRoute(destLat, destLon);
+    if (!routeInfo) return;
+
+    const distanceKm = (routeInfo.distance / 1000).toFixed(2);
+    const durationMin = (routeInfo.duration / 60).toFixed(1);
+
+    navigate("/checkout", {
+      state: {
+        locationCode: `${destLat}, ${destLon}`,
+        distance: distanceKm,
+        duration: durationMin,
+      },
+    });
   };
 
+  // -----------------------------
+  // 5. UI
+  // -----------------------------
   return (
     <div className="map-wrapper">
       <div className="checkout-header">
         <div className="btn-back" onClick={() => navigate("/checkout")}>
-          <i className="bx  bx-chevron-left"></i>
+          <i className="bx bx-chevron-left"></i>
           <span>Back</span>
         </div>
-        <h2 className="page-title">🛒 Checkout</h2>
+        <h2 className="page-title">📍 Your Location</h2>
       </div>
 
       <div className="map-container">

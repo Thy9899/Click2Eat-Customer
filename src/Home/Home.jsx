@@ -9,12 +9,11 @@ import PaymentSuccess from "../Page/PaymentSuccess/PaymentSuccess";
 import Saved from "../Page/Saved/SavedPage";
 import Profile from "../Page/ProfilePage/ProfilePage";
 import History from "../Page/History/History";
-import OrderStatus from "../Page/Order/OrderStatus";
+import OrderStatus from "../Page/OrderStatus/OrderStatus";
 import Invoice from "../Page/Invoice/Invoice";
 import History_Detail from "../Page/HistoryDetail/HistoryDetail";
 import ProductDetial from "../Page/ProductDetail/ProductDetial";
 import MapView from "../Page/MapView/MapView";
-import Auth from "../components/Auth/Auth";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");

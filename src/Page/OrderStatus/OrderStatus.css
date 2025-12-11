@@ -1,0 +1,241 @@
+.order-wrapper {
+  width: 80%;
+  margin: 10px auto;
+  font-family: "Inter", sans-serif;
+}
+
+.header-order-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.header-order-status i {
+  font-size: 24px;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-back:hover {
+  transform: scale(1.05);
+  color: #000;
+}
+
+.page-title {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Container for admin delivery confirmation */
+.admin-confirmed {
+  display: flex;
+  flex-wrap: wrap; /* allow items to wrap on smaller screens */
+  gap: 25px;
+  /* padding: 20px;
+  background: #f5f5f5; */
+}
+
+/* Customer information box */
+.cus-information {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1 1 250px; /* flexible width, min 250px */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.cus-information span {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.cus-information p {
+  margin: 8px 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* Delivery information box */
+.deliver-info {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1 1 600px; /* flexible width, min 600px */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.deliver-info span {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.deliver-info p {
+  margin: 6px 0;
+  font-size: 1rem;
+}
+
+/* Progress bar container */
+.deliver-info .progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background: #ddd;
+  position: relative;
+  margin-top: 50px;
+  border-radius: 5px;
+}
+
+/* Start & End labels */
+.deliver-info .progress-bar-container span.label-start,
+.deliver-info .progress-bar-container span.label-end {
+  position: absolute;
+  top: -25px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.deliver-info .progress-bar-container span.label-start {
+  left: 0;
+}
+
+.deliver-info .progress-bar-container span.label-end {
+  right: 0;
+}
+
+/* Driver icon moving along progress bar */
+.deliver-info .progress-bar-container span.driver-icon {
+  position: absolute;
+  top: -35px;
+  transform: translateX(-50%);
+  font-size: 22px;
+  transition: left 0.1s linear;
+}
+
+.deliver-info .progress-bar-container span.driver-icon img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 50px;
+  /* margin-right: 50px; */
+}
+
+/* Remaining distance & time */
+.deliver-info .Progress-info {
+  margin-top: 10px;
+}
+
+.deliver-info .Progress-info p {
+  margin: 5px 0;
+}
+
+.deliver-info .remaining-info {
+  margin-top: 30px;
+}
+
+.remaining-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.deliver-info .remaining-info p {
+  margin: 5px 0;
+}
+
+/* --------------------------------
+ completed box 
+-------------------------------- */
+.completed-box {
+  text-align: center;
+  padding: 25px;
+  margin-top: 20px;
+  border-radius: 12px;
+  background: #e4ffe4;
+  border: 2px solid #59d159;
+  font-size: 22px;
+  font-weight: bold;
+  color: #1c8c1c;
+}
+
+/* .btn-invoice {
+  padding: 8px 14px;
+  background: #0a84ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease-in-out;
+}
+
+.btn-invoice:hover {
+  background: #006fde;
+}  */
+
+/* --------------------------------
+Pending confirmation box 
+-------------------------------- */
+.pending-confirm {
+  width: 60px;
+  height: 60px;
+  margin: 35px auto;
+  border-radius: 50%;
+  background: #fff7e6;
+  border: 3px solid #f5c76b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 40px;
+  font-weight: bold;
+  color: #f5a623;
+
+  animation: spinPulse 1.8s infinite ease-in-out;
+}
+
+/* Animation: slow spin + pulse */
+@keyframes spinPulse {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.85;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .deliver-info {
+    flex: 1 1 100%;
+  }
+}

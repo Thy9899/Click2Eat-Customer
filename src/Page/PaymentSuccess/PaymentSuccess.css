@@ -2,8 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: #f7f7f7;
+  margin-top: 50px;
 }
 
 .success-card {
