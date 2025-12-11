@@ -96,7 +96,7 @@ const Payment = () => {
               />
             </button>
 
-            <button onClick={() => handlePayment("Cash")}>
+            <button onClick={() => navigate("/")}>
               <p>Pay with Cash</p>
               <img
                 src="https://images.icon-icons.com/403/PNG/512/cash_40532.png"
