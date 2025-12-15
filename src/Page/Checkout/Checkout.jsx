@@ -30,6 +30,8 @@ const Checkout = () => {
 
   // Selected location from MapView
   const selectedLocation = location.state?.locationCode || "";
+  // const selectedLocation =
+  //   location.state?.locationCode || "11.554997,104.9287746";
 
   // -----------------------------
   // Calculated totals

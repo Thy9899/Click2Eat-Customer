@@ -5,9 +5,46 @@ import { toast } from "react-toastify";
 import "./OrderStatus.css";
 
 const DELIVERY_ORIGIN = { lat: 11.5564, lon: 104.9282 };
+const AVG_SPEED_KMH = 25;
+const ROAD_FACTOR = 1.25;
+
+/* =============================
+   HELPER FUNCTIONS
+============================= */
+const toRad = (d) => (d * Math.PI) / 180;
+
+const haversineKm = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+const calculateRoute = (destLat, destLon) => {
+  const straightKm = haversineKm(
+    DELIVERY_ORIGIN.lat,
+    DELIVERY_ORIGIN.lon,
+    destLat,
+    destLon
+  );
+
+  const distanceKm = straightKm * ROAD_FACTOR;
+  const durationMin = (distanceKm / AVG_SPEED_KMH) * 60;
+
+  return {
+    distanceKm,
+    durationMin,
+  };
+};
 
 const OrderStatus = () => {
   const navigate = useNavigate();
+  const intervalRef = useRef(null);
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,11 +56,9 @@ const OrderStatus = () => {
   const [originalDistance, setOriginalDistance] = useState(0);
   const [originalDuration, setOriginalDuration] = useState(0);
 
-  const intervalRef = useRef(null);
-
-  // -----------------------------
-  // FETCH LAST ORDER
-  // -----------------------------
+  /* =============================
+     FETCH LAST ORDER
+  ============================= */
   useEffect(() => {
     const fetchLastOrder = async () => {
       try {
@@ -48,8 +83,6 @@ const OrderStatus = () => {
 
         setOrder(lastOrder);
         setConfirmed(lastOrder.status === "confirmed");
-
-        // only mark loading false after order is set
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -62,76 +95,57 @@ const OrderStatus = () => {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  // -----------------------------
-  // DELIVERY PROGRESS SIMULATION
-  // -----------------------------
+  /* =============================
+     DELIVERY PROGRESS SIMULATION
+  ============================= */
   useEffect(() => {
-    if (!order || !confirmed || order.completed) return;
+    if (!order || !confirmed || order.completed || order.status === "canceled")
+      return;
+
     if (!order.shipping_address?.location) return;
 
     const [lat, lon] = order.shipping_address.location.split(",").map(Number);
 
-    const fetchRouteAndStart = async () => {
-      try {
-        const routeRes = await fetch(
-          `https://router.project-osrm.org/route/v1/driving/${DELIVERY_ORIGIN.lon},${DELIVERY_ORIGIN.lat};${lon},${lat}?overview=false`
-        );
-        const routeData = await routeRes.json();
+    const { distanceKm, durationMin } = calculateRoute(lat, lon);
 
-        if (!routeData.routes?.length) {
-          toast.error("No route found");
-          return;
-        }
+    setOriginalDistance(distanceKm.toFixed(2));
+    setOriginalDuration(durationMin.toFixed(1));
+    setLeftDistance(distanceKm.toFixed(2));
+    setLeftDuration(durationMin.toFixed(1));
 
-        const route = routeData.routes[0];
-        const distanceKm = route.distance / 1000;
-        const durationMin = route.duration / 60;
+    if (!order.deliveryStartTime) return;
 
-        setOriginalDistance(distanceKm.toFixed(2));
-        setOriginalDuration(durationMin.toFixed(1));
-        setLeftDistance(distanceKm.toFixed(2));
-        setLeftDuration(durationMin.toFixed(1));
+    intervalRef.current = setInterval(() => {
+      const startTime = new Date(order.deliveryStartTime).getTime();
+      const now = Date.now();
 
-        if (!order.deliveryDuration) {
-          setOrder((prev) => ({ ...prev, deliveryDuration: durationMin }));
-        }
+      const elapsedMs = now - startTime;
+      const totalMs = durationMin * 60 * 1000;
 
-        if (!order.deliveryStartTime) return;
+      const newProgress = Math.min((elapsedMs / totalMs) * 100, 100);
+      setProgress(newProgress);
 
-        // Start interval
-        intervalRef.current = setInterval(() => {
-          const startTime = new Date(order.deliveryStartTime).getTime();
-          const now = Date.now();
-          const elapsedMs = now - startTime;
-          const totalMs = order.deliveryDuration * 60 * 1000;
+      const remainingMin = Math.max((totalMs - elapsedMs) / 60000, 0);
+      setLeftDuration(remainingMin.toFixed(1));
 
-          const newProgress = Math.min((elapsedMs / totalMs) * 100, 100);
-          setProgress(newProgress);
+      const remainingKm = Math.max(
+        distanceKm - (distanceKm * newProgress) / 100,
+        0
+      );
+      setLeftDistance(remainingKm.toFixed(2));
 
-          const remaining = Math.max((totalMs - elapsedMs) / 60000, 0);
-          setLeftDuration(remaining.toFixed(1));
-
-          const newDistance = Math.max(
-            distanceKm - (distanceKm * newProgress) / 100,
-            0
-          );
-          setLeftDistance(newDistance.toFixed(2));
-
-          if (newProgress >= 100) {
-            clearInterval(intervalRef.current);
-            markOrderCompleted();
-          }
-        }, 1000);
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to fetch route");
+      if (newProgress >= 100) {
+        clearInterval(intervalRef.current);
+        markOrderCompleted();
       }
-    };
+    }, 1000);
 
-    fetchRouteAndStart();
     return () => clearInterval(intervalRef.current);
   }, [order, confirmed]);
 
+  /* =============================
+     MARK COMPLETED
+  ============================= */
   const markOrderCompleted = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -147,7 +161,7 @@ const OrderStatus = () => {
       toast.success("🎉 Order Completed!");
     } catch (err) {
       console.error(err);
-      toast.error("Failed to mark as completed");
+      toast.error("Failed to mark order completed");
     }
   };
 
@@ -158,6 +172,9 @@ const OrderStatus = () => {
     ? order.shipping_address.location.split(",")
     : [0, 0];
 
+  // =============================
+  // UI
+  // =============================
   return (
     <div className="order-wrapper">
       <div className="header-order-status">
@@ -167,8 +184,11 @@ const OrderStatus = () => {
         </button>
         <h2 className="page-title">📦 Order Status</h2>
       </div>
+
       <div className="orders-list">
-        {order.completed ? (
+        {order.status === "cancelled" ? (
+          <div className="canceled-box">❌ Your Order Has Been Canceled</div>
+        ) : order.completed ? (
           <div className="completed-box">
             🎉 Your Order Has Been Delivered Successfully!
           </div>
@@ -192,6 +212,7 @@ const OrderStatus = () => {
                 <b>Status:</b> {order.status}
               </p>
             </div>
+
             <div className="deliver-info">
               <span>⏳ Waiting for admin to confirm your order...</span>
               <div className="pending-confirm">⏳</div>
@@ -217,6 +238,7 @@ const OrderStatus = () => {
                 <b>Status:</b> {order.status}
               </p>
             </div>
+
             <div className="deliver-info">
               <span>🏍️ Your Order Is On The Way!</span>
               <p>
@@ -237,6 +259,7 @@ const OrderStatus = () => {
               <p className="Progress-info">
                 Progress: <b>{progress.toFixed(1)}%</b>
               </p>
+
               <div className="remaining-info">
                 <div className="remaining-title">📉 Live Countdown</div>
                 <p>

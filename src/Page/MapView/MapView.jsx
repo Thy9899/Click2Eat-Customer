@@ -4,6 +4,48 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MapView.css";
 
+/* -----------------------------
+   HELPER FUNCTIONS
+----------------------------- */
+
+// Haversine distance (km)
+const calculateDistanceKm = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const toRad = (d) => (d * Math.PI) / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+// Custom route calculation (NO API)
+const calculateRoute = (origin, dest) => {
+  const straightKm = calculateDistanceKm(
+    origin.lat,
+    origin.lon,
+    dest.lat,
+    dest.lon
+  );
+
+  // Adjust for real roads
+  const ROAD_FACTOR = 1.25;
+  const distanceKm = straightKm * ROAD_FACTOR;
+
+  // Average delivery speed (motorbike)
+  const AVG_SPEED = 25; // km/h
+  const durationMin = (distanceKm / AVG_SPEED) * 60;
+
+  return {
+    distanceKm: distanceKm.toFixed(2),
+    durationMin: durationMin.toFixed(1),
+  };
+};
+
 const MapView = () => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
@@ -11,26 +53,28 @@ const MapView = () => {
 
   const [locationData, setLocationData] = useState(null);
 
-  // YOUR RESTAURANT / DELIVERY CENTER ORIGIN
+  // DELIVERY ORIGIN (Restaurant)
   const DELIVERY_ORIGIN = {
     lat: 11.5564,
     lon: 104.9282,
   };
 
-  // -----------------------------
-  // 1. Initialize Map
-  // -----------------------------
+  /* -----------------------------
+     1. Initialize Map
+  ----------------------------- */
   useEffect(() => {
     if (mapRef.current) return;
 
-    const map = L.map("map").setView([11.5564, 104.9282], 13);
+    const map = L.map("map").setView(
+      [DELIVERY_ORIGIN.lat, DELIVERY_ORIGIN.lon],
+      13
+    );
     mapRef.current = map;
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
     }).addTo(map);
 
-    // Click on map
     map.on("click", async (e) => {
       const { lat, lng } = e.latlng;
 
@@ -40,18 +84,26 @@ const MapView = () => {
         markerRef.current.setLatLng([lat, lng]);
       }
 
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`
-      );
-      const data = await res.json();
-
-      setLocationData(data);
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
+          {
+            headers: {
+              "User-Agent": "FoodDeliveryApp/1.0",
+            },
+          }
+        );
+        const data = await res.json();
+        setLocationData(data);
+      } catch (err) {
+        console.error("Nominatim error", err);
+      }
     });
   }, []);
 
-  // -----------------------------
-  // 2. Get My Current Location
-  // -----------------------------
+  /* -----------------------------
+     2. Get My Location
+  ----------------------------- */
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation not supported");
@@ -70,73 +122,52 @@ const MapView = () => {
         markerRef.current.setLatLng([latitude, longitude]);
       }
 
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`
-      );
-      const data = await res.json();
-
-      setLocationData(data);
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
+          {
+            headers: {
+              "User-Agent": "FoodDeliveryApp/1.0",
+            },
+          }
+        );
+        const data = await res.json();
+        setLocationData(data);
+      } catch (err) {
+        console.error("Nominatim error", err);
+      }
     });
   };
 
-  // -----------------------------
-  // 3. Calculate Distance & Duration via OSRM API
-  // -----------------------------
-  const calculateRoute = async (destLat, destLon) => {
-    try {
-      const url = `https://router.project-osrm.org/route/v1/driving/${DELIVERY_ORIGIN.lon},${DELIVERY_ORIGIN.lat};${destLon},${destLat}?overview=false`;
-
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (!data.routes || data.routes.length === 0) {
-        alert("No route found");
-        return null;
-      }
-
-      const route = data.routes[0];
-
-      return {
-        distance: route.distance, // meters
-        duration: route.duration, // seconds
-      };
-    } catch (err) {
-      console.error(err);
-      alert("Error calculating route");
-      return null;
-    }
-  };
-
-  // -----------------------------
-  // 4. Confirm Location + Route Calculation
-  // -----------------------------
-  const handleConfirm = async () => {
+  /* -----------------------------
+     3. Confirm Location
+  ----------------------------- */
+  const handleConfirm = () => {
     if (!locationData) {
       alert("Please pin a location first");
       return;
     }
 
-    const destLat = locationData.lat;
-    const destLon = locationData.lon;
+    const dest = {
+      lat: parseFloat(locationData.lat),
+      lon: parseFloat(locationData.lon),
+    };
 
-    const routeInfo = await calculateRoute(destLat, destLon);
-    if (!routeInfo) return;
-
-    const distanceKm = (routeInfo.distance / 1000).toFixed(2);
-    const durationMin = (routeInfo.duration / 60).toFixed(1);
+    const route = calculateRoute(DELIVERY_ORIGIN, dest);
 
     navigate("/checkout", {
       state: {
-        locationCode: `${destLat}, ${destLon}`,
-        distance: distanceKm,
-        duration: durationMin,
+        locationCode: `${dest.lat}, ${dest.lon}`,
+        distance: route.distanceKm,
+        duration: route.durationMin,
+        address: locationData.display_name,
       },
     });
   };
 
-  // -----------------------------
-  // 5. UI
-  // -----------------------------
+  /* -----------------------------
+     4. UI
+  ----------------------------- */
   return (
     <div className="map-wrapper">
       <div className="checkout-header">
@@ -161,58 +192,36 @@ const MapView = () => {
         </div>
 
         <div className="location-detail">
-          {locationData ? (
-            <div className="location-details">
-              <h2>📌 Location Details</h2>
-              <p>
-                <b>Latitude:</b> {locationData.lat}
-              </p>
-              <p>
-                <b>Longitude:</b> {locationData.lon}
-              </p>
-              <p>
-                <b>Country:</b> {locationData.address.country}
-              </p>
-              <p>
-                <b>City:</b>{" "}
-                {locationData.address.city || locationData.address.town}
-              </p>
-              <p>
-                <b>Road:</b> {locationData.address.road || "Unknown"}
-              </p>
-              <p>
-                <b>Postcode:</b> {locationData.address.postcode || "N/A"}
-              </p>
-              <p style={{ marginTop: "10px" }}>
-                <b>Selected:</b> {locationData.lat}, {locationData.lon}
-              </p>
-            </div>
-          ) : (
-            <div className="location-details">
-              <h2>📌 Location Details</h2>
-              <p>
-                <b>Latitude:</b>
-              </p>
-              <p>
-                <b>Longitude:</b>
-              </p>
-              <p>
-                <b>Country:</b>
-              </p>
-              <p>
-                <b>City:</b>
-              </p>
-              <p>
-                <b>Road:</b>
-              </p>
-              <p>
-                <b>Postcode:</b>
-              </p>
-              <p>
-                <b>Selected:</b>
-              </p>
-            </div>
-          )}
+          <div className="location-details">
+            <h2>📌 Location Details</h2>
+            {locationData ? (
+              <>
+                <p>
+                  <b>Latitude:</b> {locationData.lat}
+                </p>
+                <p>
+                  <b>Longitude:</b> {locationData.lon}
+                </p>
+                <p>
+                  <b>Country:</b> {locationData.address?.country}
+                </p>
+                <p>
+                  <b>City:</b>{" "}
+                  {locationData.address?.city ||
+                    locationData.address?.town ||
+                    "N/A"}
+                </p>
+                <p>
+                  <b>Road:</b> {locationData.address?.road || "Unknown"}
+                </p>
+                <p>
+                  <b>Postcode:</b> {locationData.address?.postcode || "N/A"}
+                </p>
+              </>
+            ) : (
+              <p>Click on map to select a location</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

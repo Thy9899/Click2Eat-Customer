@@ -217,6 +217,26 @@ Pending confirmation box
   animation: spinPulse 1.8s infinite ease-in-out;
 }
 
+.canceled-box {
+  padding: 20px;
+  background: #ffe5e5;
+  border: 1px solid #ff4d4f;
+  color: #a8071a;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.btn-cancel {
+  margin-top: 15px;
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 /* Animation: slow spin + pulse */
 @keyframes spinPulse {
   0% {
