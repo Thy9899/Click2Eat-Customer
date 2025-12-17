@@ -140,13 +140,17 @@ const ProfilePage = () => {
 
               {/* Social Icons */}
               <div className="social-links">
-                <a>
+                <a
+                  href="https://www.facebook.com/profile.php?id=100071130440893&mibextid=LQQJ4d"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img src="https://images.icon-icons.com/2108/PNG/512/facebook_icon_130940.png" />
                 </a>
-                <a>
+                <a href="https://t.me/chanthy_kean">
                   <img src="https://images.icon-icons.com/2108/PNG/512/telegram_icon_130816.png" />
                 </a>
-                <a>
+                <a href="https://www.instagram.com/sii8718?igsh=am8xdnpmdW0xcDZl&utm_source=qr">
                   <img src="https://images.icon-icons.com/836/PNG/512/Instagram_icon-icons.com_66804.png" />
                 </a>
               </div>

@@ -105,6 +105,8 @@ const Checkout = () => {
       const payload = {
         items: cart.map((item) => ({
           product_id: item.product_id,
+          name: item.name,
+          category: item.category,
           quantity: item.quantity,
           unit_price: item.unit_price,
         })),
@@ -125,17 +127,17 @@ const Checkout = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if ([200, 201].includes(res.status)) {
-        // Save order in cart context and local storage
-        confirmCart(res.data.order);
-        saveLastOrderToLocal(res.data.order);
+      const createdOrder = res.data.order;
 
-        toast.success("Order confirmed successfully!");
-        navigate(`/payment/${res.data.order.order_id}`);
-      }
+      confirmCart(createdOrder);
+      saveLastOrderToLocal(createdOrder);
+
+      toast.success("Order placed successfully!");
+      navigate(`/payment/${createdOrder._id}`);
     } catch (err) {
       toast.error(err.response?.data?.error || "Error confirming order.");
       console.error(err);
+      toast.error(err.response?.data?.error || "Order failed");
     } finally {
       setLoading(false);
     }
@@ -216,6 +218,18 @@ const Checkout = () => {
               onClick={() => navigate("/map")}
               required
             />
+            {/* <input
+              type="text"
+              value={selectedLocation}
+              placeholder={
+                shippingMethod === "pickup"
+                  ? "Pickup at store"
+                  : "Click to select location"
+              }
+              readOnly
+              disabled={shippingMethod === "pickup"}
+              onClick={() => shippingMethod === "delivery" && navigate("/map")}
+            /> */}
           </div>
 
           <span>
