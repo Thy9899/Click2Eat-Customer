@@ -4,7 +4,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [customer, setCustomer] = useState(
-    JSON.parse(localStorage.getItem("customer")) || null
+    JSON.parse(localStorage.getItem("customer")) || null,
   );
 
   const logoutTimer = useRef(null); // ✅ track timer across renders
@@ -49,12 +49,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const res = await fetch(
-      "https://click2eat-backend-customer-service.onrender.com/api/customers/login",
+      "https://click2eat-backend-customer-service-iiqh.onrender.com/api/customers/login",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-      }
+      },
     );
 
     const data = await res.json();
@@ -74,12 +74,12 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (email, password, username) => {
     const res = await fetch(
-      "https://click2eat-backend-customer-service.onrender.com/api/customers/register",
+      "https://click2eat-backend-customer-service-iiqh.onrender.com/api/customers/register",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, username }),
-      }
+      },
     );
 
     const data = await res.json();

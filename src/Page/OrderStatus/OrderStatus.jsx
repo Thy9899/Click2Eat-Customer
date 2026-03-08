@@ -30,7 +30,7 @@ const calculateRoute = (destLat, destLon) => {
     DELIVERY_ORIGIN.lat,
     DELIVERY_ORIGIN.lon,
     destLat,
-    destLon
+    destLon,
   );
 
   const distanceKm = straightKm * ROAD_FACTOR;
@@ -63,6 +63,7 @@ const OrderStatus = () => {
     const fetchLastOrder = async () => {
       try {
         const token = localStorage.getItem("token");
+
         if (!token) {
           toast.error("Please login first");
           setLoading(false);
@@ -70,13 +71,16 @@ const OrderStatus = () => {
         }
 
         const res = await axios.get(
-          "https://click2eat-backend-order-service.onrender.com/api/order/last",
-          { headers: { Authorization: `Bearer ${token}` } }
+          "https://click2eat-backend-order-service-48hv.onrender.com/api/order/last",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
         );
 
         const lastOrder = res.data.order;
+
         if (!lastOrder) {
-          toast.error("No order found");
+          setOrder(null);
           setLoading(false);
           return;
         }
@@ -92,6 +96,7 @@ const OrderStatus = () => {
     };
 
     fetchLastOrder();
+
     return () => clearInterval(intervalRef.current);
   }, []);
 
@@ -102,7 +107,7 @@ const OrderStatus = () => {
     if (!order || !confirmed || order.completed || order.status === "canceled")
       return;
 
-    if (!order.shipping_address?.location) return;
+    if (!order?.shipping_address?.location) return;
 
     const [lat, lon] = order.shipping_address.location.split(",").map(Number);
 
@@ -130,7 +135,7 @@ const OrderStatus = () => {
 
       const remainingKm = Math.max(
         distanceKm - (distanceKm * newProgress) / 100,
-        0
+        0,
       );
       setLeftDistance(remainingKm.toFixed(2));
 
@@ -149,12 +154,15 @@ const OrderStatus = () => {
   const markOrderCompleted = async () => {
     try {
       const token = localStorage.getItem("token");
+
       if (!token) return;
 
       await axios.put(
-        `https://click2eat-backend-order-service.onrender.com/api/order/complete/${order._id}`,
+        `https://click2eat-backend-order-service-48hv.onrender.com/api/order/complete/${order._id}`,
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
 
       setOrder((prev) => ({ ...prev, completed: true }));
@@ -165,16 +173,13 @@ const OrderStatus = () => {
     }
   };
 
-  if (loading) return <p>Loading order...</p>;
-  if (!order) return <p>No order found.</p>;
-
-  const [lat, lon] = order.shipping_address?.location
+  const [lat, lon] = order?.shipping_address?.location
     ? order.shipping_address.location.split(",")
     : [0, 0];
 
-  // =============================
-  // UI
-  // =============================
+  /* =============================
+     UI
+  ============================= */
   return (
     <div className="order-wrapper">
       <div className="header-order-status">
@@ -182,97 +187,129 @@ const OrderStatus = () => {
           <i className="bx bx-chevron-left"></i>
           <span>Back</span>
         </button>
+
         <h2 className="page-title">📦 Order Status</h2>
       </div>
 
-      <div className="orders-list">
-        {order.status === "cancelled" ? (
-          <div className="canceled-box">❌ Your Order Has Been Canceled</div>
-        ) : order.completed ? (
-          <div className="completed-box">
-            🎉 Your Order Has Been Delivered Successfully!
-          </div>
-        ) : !confirmed ? (
-          <div className="admin-confirmed">
-            <div className="cus-information">
-              <span>🚚 Delivery Information</span>
-              <p>
-                <b>Customer:</b> {order.shipping_address.fullName}
-              </p>
-              <p>
-                <b>Phone:</b> {order.shipping_address.phone}
-              </p>
-              <p>
-                <b>City:</b> {order.shipping_address.city}
-              </p>
-              <p>
-                <b>Location:</b> {lat}, {lon}
-              </p>
-              <p>
-                <b>Status:</b> {order.status}
-              </p>
+      {loading ? (
+        <div className="spinner-center">
+          <p>Loading order...</p>
+        </div>
+      ) : !order ? (
+        <div className="spinner-center">
+          <p>No order found.</p>
+        </div>
+      ) : (
+        <div className="orders-list">
+          {order.status === "canceled" ? (
+            <div className="canceled-box">❌ Your Order Has Been Canceled</div>
+          ) : order.completed ? (
+            <div className="completed-box">
+              🎉 Your Order Has Been Delivered Successfully!
             </div>
+          ) : !confirmed ? (
+            <div className="admin-confirmed">
+              <div className="cus-information">
+                <span>🚚 Delivery Information</span>
 
-            <div className="deliver-info">
-              <span>⏳ Waiting for admin to confirm your order...</span>
-              <div className="pending-confirm">⏳</div>
-            </div>
-          </div>
-        ) : (
-          <div className="admin-confirmed">
-            <div className="cus-information">
-              <span>🚚 Delivery Information</span>
-              <p>
-                <b>Customer:</b> {order.shipping_address.fullName}
-              </p>
-              <p>
-                <b>Phone:</b> {order.shipping_address.phone}
-              </p>
-              <p>
-                <b>City:</b> {order.shipping_address.city}
-              </p>
-              <p>
-                <b>Location:</b> {lat}, {lon}
-              </p>
-              <p>
-                <b>Status:</b> {order.status}
-              </p>
-            </div>
-
-            <div className="deliver-info">
-              <span>🏍️ Your Order Is On The Way!</span>
-              <p>
-                <b>Total Distance:</b> {originalDistance} km
-              </p>
-              <p>
-                <b>Total ETA:</b> {originalDuration} minutes
-              </p>
-
-              <div className="progress-bar-container">
-                <span className="label-start">Start 📍</span>
-                <span className="label-end">End 🏁</span>
-                <span className="driver-icon" style={{ left: `${progress}%` }}>
-                  <img src="https://images.icon-icons.com/2989/PNG/512/express_shipping_delivery_service_hour_icon_187260.png" />
-                </span>
-              </div>
-
-              <p className="Progress-info">
-                Progress: <b>{progress.toFixed(1)}%</b>
-              </p>
-
-              <div className="remaining-info">
-                <div className="remaining-title">📉 Live Countdown</div>
                 <p>
-                  <b>Remaining Distance:</b> {leftDistance} km
+                  <b>Customer:</b> {order.shipping_address?.fullName}
                 </p>
+
                 <p>
-                  <b>Remaining Time:</b> {leftDuration} minutes
+                  <b>Phone:</b> {order.shipping_address?.phone}
+                </p>
+
+                <p>
+                  <b>City:</b> {order.shipping_address?.city}
+                </p>
+
+                <p>
+                  <b>Location:</b> {lat}, {lon}
+                </p>
+
+                <p>
+                  <b>Status:</b> {order.status}
                 </p>
               </div>
+
+              <div className="deliver-info">
+                <span>⏳ Waiting for admin to confirm your order...</span>
+                <div className="pending-confirm">⏳</div>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="admin-confirmed">
+              <div className="cus-information">
+                <span>🚚 Delivery Information</span>
+
+                <p>
+                  <b>Customer:</b> {order.shipping_address?.fullName}
+                </p>
+
+                <p>
+                  <b>Phone:</b> {order.shipping_address?.phone}
+                </p>
+
+                <p>
+                  <b>City:</b> {order.shipping_address?.city}
+                </p>
+
+                <p>
+                  <b>Location:</b> {lat}, {lon}
+                </p>
+
+                <p>
+                  <b>Status:</b> {order.status}
+                </p>
+              </div>
+
+              <div className="deliver-info">
+                <span>🏍️ Your Order Is On The Way!</span>
+
+                <p>
+                  <b>Total Distance:</b> {originalDistance} km
+                </p>
+
+                <p>
+                  <b>Total ETA:</b> {originalDuration} minutes
+                </p>
+
+                <div className="progress-bar-container">
+                  <span className="label-start">Start 📍</span>
+                  <span className="label-end">End 🏁</span>
+
+                  <span
+                    className="driver-icon"
+                    style={{ left: `${progress}%` }}
+                  >
+                    <img
+                      src="https://images.icon-icons.com/2989/PNG/512/express_shipping_delivery_service_hour_icon_187260.png"
+                      alt="driver"
+                    />
+                  </span>
+                </div>
+
+                <p className="Progress-info">
+                  Progress: <b>{progress.toFixed(1)}%</b>
+                </p>
+
+                <div className="remaining-info">
+                  <div className="remaining-title">📉 Live Countdown</div>
+
+                  <p>
+                    <b>Remaining Distance:</b> {leftDistance} km
+                  </p>
+
+                  <p>
+                    <b>Remaining Time:</b> {leftDuration} minutes
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

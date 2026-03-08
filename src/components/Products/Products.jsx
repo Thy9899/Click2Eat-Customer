@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const API_URL =
-  "https://click2eat-backend-product-service.onrender.com/api/products";
+  "https://click2eat-backend-product-service-887e.onrender.com/api/products";
 
 const Products = ({ products }) => {
   const { addToCart } = useCart();

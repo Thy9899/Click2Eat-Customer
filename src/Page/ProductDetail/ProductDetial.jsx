@@ -21,23 +21,31 @@ const ProductDetail = () => {
 
   const cartItem =
     product &&
-    cart.find((item) => String(item.product_id) === String(product.product_id));
+    cart.find(
+      (item) =>
+        String(item.product_id || item._id || item.id) ===
+        String(product.product_id || product._id || product.id),
+    );
 
   const cartQty = cartItem ? cartItem.quantity : 0;
 
-  // Helper to find an array in response (works for many shapes)
+  // ============================
+  // Helper: Extract array safely
+  // ============================
   const extractArrayFromResponse = (resData) => {
     if (!resData) return [];
+
     if (Array.isArray(resData)) return resData;
 
     if (resData.products && Array.isArray(resData.products))
       return resData.products;
+
     if (resData.product && Array.isArray(resData.product))
       return resData.product;
+
     if (resData.allProducts && Array.isArray(resData.allProducts))
       return resData.allProducts;
 
-    // If resData is object and contains any array value, return the first array
     if (typeof resData === "object") {
       for (const val of Object.values(resData)) {
         if (Array.isArray(val)) return val;
@@ -47,34 +55,36 @@ const ProductDetail = () => {
     return [];
   };
 
+  // ============================
+  // Fetch Product + Suggestions
+  // ============================
   useEffect(() => {
     let mounted = true;
 
     const fetchProduct = async () => {
       setLoadingProduct(true);
+
       try {
         const res = await axios.get(
-          `https://click2eat-backend-product-service.onrender.com/api/products/${product_id}`
+          `https://click2eat-backend-product-service-887e.onrender.com/api/products/${product_id}`,
         );
-        // try multiple shapes too
+
         const prod =
           res?.data?.product ||
           res?.data ||
           (Array.isArray(res?.data)
             ? res.data.find(
                 (p) =>
-                  String(p.product_id || p._id || p.id) === String(product_id)
+                  String(p.product_id || p._id || p.id) === String(product_id),
               )
             : null);
 
-        // If res.data.product is an array, find the single product inside
         if (Array.isArray(prod)) {
           const found = prod.find(
-            (p) => String(p.product_id || p._id || p.id) === String(product_id)
+            (p) => String(p.product_id || p._id || p.id) === String(product_id),
           );
           if (mounted) setProduct(found || null);
         } else {
-          // If prod is an object with product fields
           if (mounted) setProduct(prod || null);
         }
       } catch (err) {
@@ -87,32 +97,30 @@ const ProductDetail = () => {
 
     const fetchSuggested = async () => {
       setLoadingSuggested(true);
+
       try {
         const res = await axios.get(
-          `https://click2eat-backend-product-service.onrender.com/api/products`
+          `https://click2eat-backend-product-service-887e.onrender.com/api/products`,
         );
 
         const all = extractArrayFromResponse(res?.data);
 
         if (!Array.isArray(all) || all.length === 0) {
-          console.warn("No products array found in response:", res?.data);
           setSuggested([]);
           return;
         }
 
-        // remove current product by checking several possible id fields
         const filtered = all.filter((p) => {
-          const idVals = [p.product_id, p._id, p.id];
-          return !idVals.map((v) => String(v)).includes(String(product_id));
+          const ids = [p.product_id, p._id, p.id];
+          return !ids.map((v) => String(v)).includes(String(product_id));
         });
 
-        // shuffle & take up to 3
-        const randomThree = filtered
-          .slice() // copy
+        const randomProducts = filtered
+          .slice()
           .sort(() => 0.5 - Math.random())
           .slice(0, 5);
 
-        setSuggested(randomThree);
+        setSuggested(randomProducts);
       } catch (err) {
         console.error("Error loading suggestions:", err);
         setSuggested([]);
@@ -129,138 +137,150 @@ const ProductDetail = () => {
     };
   }, [product_id]);
 
-  if (loadingProduct) return <p className="loading">Loading product...</p>;
-  if (!product) return <p className="not-found">Product not found.</p>;
+  const description = product?.description || "";
 
-  const description = product.description || "";
   const shortText =
     description.length > 50
       ? description.substring(0, 50) + "..."
       : description;
 
+  // ============================
+  // UI
+  // ============================
   return (
     <div className="product-detail-wrapper">
-      {/* Back */}
+      {/* Back Button */}
       <div className="header-product-detail">
         <button className="btn-back" onClick={() => navigate("/")}>
-          <i className="bx  bx-chevron-left"></i>
+          <i className="bx bx-chevron-left"></i>
           <span>Back</span>
         </button>
+
         <h2 className="page-title">Product Detail</h2>
       </div>
 
-      {/* Main Content */}
-      <div className="product-detail-container">
-        <div className="product-image">
-          <img src={`${product.image}`} alt={product.name} />
-        </div>
+      {loadingProduct ? (
+        <p className="loading">Loading product...</p>
+      ) : !product ? (
+        <p className="not-found">Product not found.</p>
+      ) : (
+        <>
+          {/* Product Detail */}
+          <div className="product-detail-container">
+            <div className="product-image">
+              <img src={product.image} alt={product.name} />
+            </div>
 
-        <div className="product-info">
-          <h1>{product.name}</h1>
+            <div className="product-info">
+              <h1>{product.name}</h1>
 
-          <p className="product-price">
-            Price :
-            <span> {Number(product.unit_price || 0).toFixed(2)} USD</span>
-          </p>
+              <p className="product-price">
+                Price :
+                <span> {Number(product.unit_price || 0).toFixed(2)} USD</span>
+              </p>
 
-          <p className="product-qty">
-            {" "}
-            <span>Product ID : </span>
-            {product.product_id || product._id || product.id || "N/A"}
-          </p>
+              <p className="product-qty">
+                <span>Product ID : </span>
+                {product.product_id || product._id || product.id || "N/A"}
+              </p>
 
-          <p className="product-qty">
-            {" "}
-            <span>Stocks : </span>
-            {product.quantity || 0}
-          </p>
+              <p className="product-qty">
+                <span>Stocks : </span>
+                {product.quantity || 0}
+              </p>
 
-          {/* Description with See More */}
-          <p className="product-description">
-            {" "}
-            <span>Description : </span>
-            {expanded ? description : shortText}
-            {description.length > 50 && (
-              <span
-                onClick={() => setExpanded(!expanded)}
-                className="see-more-btn"
-              >
-                {expanded ? " See less" : " See more"}
-              </span>
-            )}
-          </p>
+              {/* Description */}
+              <p className="product-description">
+                <span>Description : </span>
 
-          {/* <div className="qty-box-detail">
-            {" "}
-            Quantity :
-            <button
-              onClick={() => removeFromCart(product.product_id)}
-              disabled={cartQty <= 0}
-            >
-              -
-            </button>
-            <span>{cartQty}</span>
-            <button onClick={() => addToCart(product)}>+</button>
-          </div> */}
+                {expanded ? description : shortText}
 
-          <button className="btn-addToCart" onClick={() => addToCart(product)}>
-            Add to Cart
-          </button>
-        </div>
-      </div>
+                {description.length > 50 && (
+                  <span
+                    onClick={() => setExpanded(!expanded)}
+                    className="see-more-btn"
+                  >
+                    {expanded ? " See less" : " See more"}
+                  </span>
+                )}
+              </p>
 
-      {/* Suggested Products */}
-      <div className="suggest-product">
-        <h2>For you</h2>
-
-        <div className="suggest-product-list">
-          {suggested.map((item) => (
-            <div
-              key={item.product_id}
-              className="suggest-card"
-              onClick={() => navigate(`/product/${item.product_id}`)}
-            >
-              <div className="suggest-img-wrapper">
-                <img src={`${item.image}`} alt={item.name} />
-
-                {/* Bookmark icon */}
-                <button
-                  className={`btn-bookmark ${
-                    isLiked(item.product_id) ? "active" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleLike(item);
-                  }}
-                >
-                  {isLiked(item.product_id) ? (
-                    <i className="bx  bxs-bookmark-heart"></i>
-                  ) : (
-                    <i className="bx bx-bookmark"></i>
-                  )}
-                </button>
-              </div>
-
-              <div className="suggest-body">
-                <h3>{item.name}</h3>
-                <p className="desc">{item.description?.substring(0, 60)}...</p>
-                <p className="price"> ${item.unit_price.toFixed(2)}</p>
-              </div>
-
-              {/* Add to cart button */}
+              {/* Add to Cart */}
               <button
-                className="btn-add-small"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart(item);
-                }}
+                className="btn-addToCart"
+                onClick={() => addToCart(product)}
               >
-                +
+                Add to Cart
               </button>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+
+          {/* Suggested Products */}
+          <div className="suggest-product">
+            <h2>For you</h2>
+
+            <div className="suggest-product-list">
+              {loadingSuggested ? (
+                <p>Loading suggestions...</p>
+              ) : (
+                suggested.map((item) => (
+                  <div
+                    key={item.product_id || item._id || item.id}
+                    className="suggest-card"
+                    onClick={() =>
+                      navigate(`/product/${item.product_id || item._id}`)
+                    }
+                  >
+                    <div className="suggest-img-wrapper">
+                      <img src={item.image} alt={item.name} />
+
+                      {/* Bookmark */}
+                      <button
+                        className={`btn-bookmark ${
+                          isLiked(item.product_id || item._id) ? "active" : ""
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleLike(item);
+                        }}
+                      >
+                        {isLiked(item.product_id || item._id) ? (
+                          <i className="bx bxs-bookmark-heart"></i>
+                        ) : (
+                          <i className="bx bx-bookmark"></i>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="suggest-body">
+                      <h3>{item.name}</h3>
+
+                      <p className="desc">
+                        {item.description?.substring(0, 60)}...
+                      </p>
+
+                      <p className="price">
+                        ${Number(item.unit_price || 0).toFixed(2)}
+                      </p>
+                    </div>
+
+                    {/* Add to Cart */}
+                    <button
+                      className="btn-add-small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(item);
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

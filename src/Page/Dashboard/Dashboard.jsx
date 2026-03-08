@@ -7,7 +7,7 @@ import ContactUs from "../../components/ContactUs/ContactUs";
 import Footer from "../../components/Footer/Footer";
 
 const API_URL =
-  "https://click2eat-backend-product-service.onrender.com/api/products";
+  "https://click2eat-backend-product-service-887e.onrender.com/api/products";
 
 const Dashboard = ({ searchTerm }) => {
   //  receive prop
@@ -30,7 +30,7 @@ const Dashboard = ({ searchTerm }) => {
   //  Then filter by search term
   if (searchTerm) {
     filteredProducts = filteredProducts.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }
 

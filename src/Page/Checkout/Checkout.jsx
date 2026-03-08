@@ -38,7 +38,7 @@ const Checkout = () => {
   // -----------------------------
   const subtotal = cart.reduce(
     (sum, item) => sum + item.unit_price * item.quantity,
-    0
+    0,
   );
   const delivery = 2; // fixed delivery cost
   const total = subtotal + delivery;
@@ -79,7 +79,7 @@ const Checkout = () => {
 
     if (missingFields.length > 0) {
       toast.error(
-        `Please fill in the following fields: ${missingFields.join(", ")}`
+        `Please fill in the following fields: ${missingFields.join(", ")}`,
       );
       return;
     }
@@ -122,9 +122,9 @@ const Checkout = () => {
 
       // Call API to create order
       const res = await axios.post(
-        "https://click2eat-backend-order-service.onrender.com/api/order",
+        "https://click2eat-backend-order-service-48hv.onrender.com/api/order",
         payload,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       const createdOrder = res.data.order;

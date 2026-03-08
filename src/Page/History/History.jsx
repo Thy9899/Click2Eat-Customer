@@ -23,10 +23,10 @@ const History = () => {
         }
 
         const res = await axios.get(
-          "https://click2eat-backend-order-service.onrender.com/api/order",
+          "https://click2eat-backend-order-service-48hv.onrender.com/api/order",
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
 
         setOrders(res.data.orders || res.data.list || []);
@@ -50,7 +50,7 @@ const History = () => {
   // Toggle individual checkbox
   const toggleSelect = (id) => {
     setSelectedOrders((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
@@ -62,7 +62,7 @@ const History = () => {
     }
 
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${ids.length} order(s)?`
+      `Are you sure you want to delete ${ids.length} order(s)?`,
     );
     if (!confirmDelete) return;
 
@@ -74,7 +74,7 @@ const History = () => {
         {
           data: { ids },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       // Remove deleted orders from UI

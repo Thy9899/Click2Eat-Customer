@@ -57,9 +57,9 @@ const Payment = () => {
 
       // Backend payment call
       await axios.post(
-        `https://click2eat-backend-order-service.onrender.com/api/order/pay/${order._id}`,
+        `https://click2eat-backend-order-service-48hv.onrender.com/api/order/pay/${order._id}`,
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       await processPayment(order._id, method);

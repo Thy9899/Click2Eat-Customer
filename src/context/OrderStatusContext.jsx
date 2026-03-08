@@ -20,10 +20,10 @@ export const OrderStatusProvider = ({ children }) => {
       }
 
       const res = await axios.get(
-        "https://click2eat-backend-order-service.onrender.com/api/order/last",
+        "https://click2eat-backend-order-service-48hv.onrender.com/api/order/last",
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       // wrap in array because backend returns `order`, not `orders`

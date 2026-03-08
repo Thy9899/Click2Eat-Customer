@@ -8,7 +8,7 @@ const ProductModal = ({ onClose, onAdd }) => {
   useEffect(() => {
     axios
       .get(
-        "https://click2eat-backend-product-service.onrender.com/api/products"
+        "https://click2eat-backend-product-service-887e.onrender.com/api/products",
       )
       .then((res) => {
         console.log("API Response:", res.data);

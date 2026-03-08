@@ -16,12 +16,12 @@ const HistoryDetail = () => {
         if (!token) return;
 
         const res = await axios.get(
-          `https://click2eat-backend-order-service.onrender.com/api/order/${order_id}`,
+          `https://click2eat-backend-order-service-48hv.onrender.com/api/order/${order_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         setOrder(res.data.order);

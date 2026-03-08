@@ -15,10 +15,10 @@ export const SavedProvider = ({ children }) => {
 
       try {
         const res = await axios.get(
-          "https://click2eat-backend-saved-service.onrender.com/api/saved",
+          "https://click2eat-backend-saved-service-1mvt.onrender.com/api/saved",
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
 
         const list = res.data.list || [];
@@ -40,21 +40,21 @@ export const SavedProvider = ({ children }) => {
     }
 
     const exists = likedProducts.find(
-      (productItem) => productItem.product_id === product.product_id
+      (productItem) => productItem.product_id === product.product_id,
     );
 
     try {
       if (exists) {
         // DELETE saved item (gateway will forward to microservice)
         await axios.delete(
-          `https://click2eat-backend-saved-service.onrender.com/api/saved/${exists.saved_id}`,
+          `https://click2eat-backend-saved-service-1mvt.onrender.com/api/saved/${exists.saved_id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
 
         setLikedProducts((prev) =>
-          prev.filter((item) => item.saved_id !== exists.saved_id)
+          prev.filter((item) => item.saved_id !== exists.saved_id),
         );
       } else {
         let payload;
@@ -81,11 +81,11 @@ export const SavedProvider = ({ children }) => {
         }
 
         const res = await axios.post(
-          "https://click2eat-backend-saved-service.onrender.com/api/saved",
+          "https://click2eat-backend-saved-service-1mvt.onrender.com/api/saved",
           payload,
           {
             headers,
-          }
+          },
         );
 
         // Store saved item from backend response
